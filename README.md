@@ -1,4 +1,4 @@
-# Personal Portfolio for the IoT/MCU class <at university/school>
+# Personal Portfolio for the Database class <Hochschule Bielefeld>
 
 > When you start editing this file, remove this description.
 >
