@@ -5,6 +5,7 @@
 Author: Trevor Kiio
 
 My partner is  Ryan Reilly Oduory, [portfolio link](https://github.com/reilly-codes/Database-class/blob/main/README.md)
+
 My partner is Trevor Fidel Nyongesa , [portfolio link](https://github.com/TrevorFidel/Database-HSBI/blob/main/README.md)
 
 In my team for the final project, I also had the following members:
