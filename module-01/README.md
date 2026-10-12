@@ -39,4 +39,4 @@ The script files are [generate_telemetry.py](generate_telemetry.py) and [load_te
 - Notes on the course inspirations and my personal profile
 - My definition of IoT, including domains, protocols, devices, and challenges
 - Results and timings for the three telemetry queries
-- My verified LLM-generated query and `EXPLAIN QUERY PLAN` notes
+- [LLM query verification notes](llm-verification.md) — prompt, SQL, run results, query plan, and verification reflection
