@@ -3,7 +3,7 @@
 ## Portfolio setup
 
 - [Personal repository](portfolio-repository.png)
-- [Instructor collaborator invitation](collaborator-access.png)
+- [Instructor collaborator access](collborator-access.png)
 
 ## SQLite shell tour
 
