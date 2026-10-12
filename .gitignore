@@ -1,10 +1,14 @@
-# local data and secrets stay out of the repository
+# Local environments and generated data
 .venv/
 *.db
 *.db-journal
 *.duckdb
 *.parquet
+module-01/telemetry.csv
+
+# Secrets and Python cache files
 .env
 __pycache__/
+
+# macOS metadata
 .DS_Store
-.gitinore

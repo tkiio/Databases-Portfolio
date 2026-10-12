@@ -1,31 +1,24 @@
-# Personal Portfolio for the Database class <Hochschule Bielefeld>
+# Trevor Kiio — HSBI Databases Portfolio
 
+This repository collects my notes, exercises, reflections, and evidence from the HSBI Databases course. Module work is organized by class session, with generated databases kept local so they can be rebuilt from the scripts.
 
+## Course work
 
-Author: Trevor Kiio
+- [Module 1 — SQL, local-first data, and SQLite](module-01/README.md)
+- [Module 2 — hardware and basic electronics](module-02/README.md) *(in progress)*
+- [Reflection 1](Reflections/ref01.md)
+- [Hardware inventory](Hardware/README.md)
 
-My partner is  Ryan Reilly Oduory, [portfolio link](https://github.com/reilly-codes/Database-class/blob/main/README.md)
+## Module 1 quick links
 
-My partner is Trevor Fidel Nyongesa , [portfolio link](https://github.com/TrevorFidel/Database-HSBI/blob/main/README.md)
+- [Toolchain check](module-01/uv-check.txt)
+- [SQLite shell tour](module-01/shell-tour.txt)
+- [Rebuildable SQL dump](module-01/tour.sql)
+- [Telemetry scripts and results](module-01/README.md#telemetry-exercise)
+- [Screenshots and evidence](module-01/evidence/README.md)
 
-In my team for the final project, I also had the following members:
-- <replace these pointy brackets with their full name>, [portfolio link](https://github.com/partner/iot-portfolio)
-- <replace these pointy brackets with their full name>, [portfolio link](https://github.com/partner/iot-portfolio)
+## Study partners
 
-Our team final project repository is [here](https://github.com/somewhere/final-iot-project)
-
-My personal profile and expectations, you can find [here](Module01/README.md#task-personal-profile).
-
-## Table of Contents
-
-- [Module 1: IoT Introduction](Module01/README.md), 
-  [Reflection 1](Reflections/ref01.md)
-- [Module 2: Hardware and Basic Electronics](Module02/README.md),
-  [Reflection 2](Reflections/ref02.md), [Reflection 3](Reflections/ref03.md)
-- ...
-
-## Miscellanious
-
-- [Hardware in my/our possession](Hardware/README.md)
-
+- Ryan Reilly Oduory — [portfolio](https://github.com/reilly-codes/Database-class)
+- Trevor Fidel Nyongesa — [portfolio](https://github.com/TrevorFidel/Database-HSBI)
 
