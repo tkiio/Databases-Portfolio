@@ -3,15 +3,19 @@
 This page collects my Module 1 notes and evidence for the HSBI Databases course.
 
 ## Learning goals
+By the end of this module, you can:
 
-In this module, I am learning to:
+Explain how this class works — the CBL/PBL philosophy, the portfolio-based project work assessment, and the "moving bar" of a first-time course.
 
-- Explain the course’s challenge- and project-based learning approach and portfolio assessment.
-- Create and maintain a personal GitHub portfolio.
-- Set up and verify the Python, SQLite, DuckDB, and Datasette toolchain with `uv`.
-- Compare embedded databases with client/server databases using measurements.
-- Load data into SQLite and query it from Python.
-- Run an LLM-generated SQL query, then verify its result and query plan.
+Set up your personal GitHub portfolio from the course template, with a clean first commit and a .gitignore that keeps databases and secrets out of Git.
+
+Set up the entire toolchain reproducibly with uv — one fixed Python plus SQLite, DuckDB, Datasette, and more — on Windows, macOS, or Linux, and verify it.
+
+Explain — with a measurement, not a slide — the difference between an embedded database and a client/server database, and why most local apps should not run a server.
+
+Load real rows into SQLite and query them from Python using bound parameters.
+
+Take a first LLM-generated query, run it, and begin the habit that defines this course: verify before you trust.
 
 ## Setup and SQLite shell
 
