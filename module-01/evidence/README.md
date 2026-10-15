@@ -4,6 +4,7 @@
 
 - [Personal repository](portfolio-repository.png)
 - [Instructor collaborator access](collborator-access.png)
+- [Commit History](<Commit History.png>)
 
 ## SQLite shell tour
 
