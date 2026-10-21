@@ -3,8 +3,8 @@
 ## Portfolio setup
 
 - [Personal repository](portfolio-repository.png)
-- [Instructor collaborator access](collborator-access.png)
-- [Commit History](<Commit History.png>)
+- [Instructor collaborator access](collaborator-access.png)
+- [Commit history](<Commit History.png>)
 
 ## SQLite shell tour
 
@@ -14,10 +14,9 @@
 ## Telemetry exercise
 
 - [Generator script](telemetry-generator.png)
-- [Readings per machine query](query-readings-per-machine.png)
-- [Peak vibration query](query-peak-vibration.png)
-- [Alarm count query](query-alarm-count.png)
+- [Readings per machine](query-readings-per-machine.png)
+- [Peak vibration](query-peak-vibration.png)
 - [Database row count](telemetry-row-count.png)
-
-![alt text](<Screenshot 2026-10-12 at 22.00.29.png>)
-![alt text](<Screenshot 2026-10-12 at 22.01.50.png>)
+- [Additional readings-per-machine capture](query-readings-per-machine-copy.png)
+- [LLM query and query plan](llm-query-and-plan.png)
+- [LLM broken-filter check](llm-broken-like-filter.png)

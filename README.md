@@ -5,8 +5,9 @@ This repository collects my notes, exercises, reflections, and evidence from the
 ## Course work
 
 - [Module 1 — SQL, local-first data, and SQLite](module-01/README.md)
-- [Module 2 — hardware and basic electronics](module-02/README.md) *(in progress)*
+- [Module 2 — ER modeling and schema auditing](module-02/README.md) *(in progress)*
 - [Reflection 1](Reflections/ref01.md)
+- [Reflection 2](Reflections/ref02.md)
 - [Hardware inventory](Hardware/README.md)
 
 ## Module 1 quick links
