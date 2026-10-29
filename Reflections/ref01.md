@@ -6,4 +6,4 @@ SQL Island made learning SQL functions engaging. I learned how several functions
 
 I also learned how to use a repository template, clone my repository, personalize it, and connect it with VS Code. Getting started with the Git and VS Code workflow took some help, and my professor guided me through the first steps. I tried to help other students connect Git with VS Code which proved to be the most challenging task for most of my peers.
 
-Interacting with my peers during class was fun, engaging, and productive. Working together helped me feel more comfortable asking questions and learning new tools.
+Interacting with my peers during class was fun, engaging, and productive. Working together helped me feel more comfortable asking questions and learning new tools. Members from the other pod helped me open some of the stuff with preview on vs code so that I don't have to go back and forth to github to see what is going on.
