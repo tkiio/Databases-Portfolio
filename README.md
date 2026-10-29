@@ -5,7 +5,8 @@ This repository collects my notes, exercises, reflections, and evidence from the
 ## Course work
 
 - [Module 1 — SQL, local-first data, and SQLite](module-01/README.md)
-- [Module 2 — ER modeling and schema auditing](module-02/README.md) *(in progress)*
+- [Module 2 — ER modeling and schema auditing](module-02/README.md) 
+- [Module 3](Module03)
 - [Reflection 1](Reflections/ref01.md)
 - [Reflection 2](Reflections/ref02.md)
 - [Hardware inventory](Hardware/README.md)
@@ -18,7 +19,7 @@ This repository collects my notes, exercises, reflections, and evidence from the
 - [Telemetry scripts and results](module-01/README.md#telemetry-exercise)
 - [Screenshots and evidence](module-01/evidence/README.md)
 
-## Study partners
+## Pod Members
 
 - Ryan Reilly Oduory — [portfolio](https://github.com/reilly-codes/Database-class)
 - Trevor Fidel Nyongesa — [portfolio](https://github.com/TrevorFidel/Database-HSBI)
