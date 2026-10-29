@@ -1,14 +1,14 @@
 # Trevor Kiio — HSBI Databases Portfolio
 
-This repository collects my notes, exercises, reflections, and evidence from the HSBI Databases course. Module work is organized by class session, with generated databases kept local so they can be rebuilt from the scripts.
-
+This repository collects my notes, exercises, reflections, and evidence from the HSBI Databases course. 
 ## Course work
 
-- [Module 1 — SQL, local-first data, and SQLite](module-01/README.md)
-- [Module 2 — ER modeling and schema auditing](module-02/README.md) 
+- [Module 1 ](module-01/README.md)
+- [Module 2 ](module-02/README.md) 
 - [Module 3](Module03)
 - [Reflection 1](Reflections/ref01.md)
 - [Reflection 2](Reflections/ref02.md)
+- [Reflection 3](Reflections/ref03.md)
 - [Hardware inventory](Hardware/README.md)
 
 ## Module 1 quick links
