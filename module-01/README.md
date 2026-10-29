@@ -30,7 +30,7 @@ The scripts generate two days of machine readings and load them into a local SQL
 1. Generate the CSV: `uv run python module-01/generate_telemetry.py`
 2. Load the database: `uv run python module-01/load_telemetry.py`
 
-The generated dataset contains **172,800 readings**. The local database measured **10 MB**. The database and generated CSV are excluded from Git; the scripts can recreate them.
+The generated dataset contains 172,800 readings. The local database measured 10 MB. The database and generated CSV are excluded from Git; the scripts can recreate them.
 
 The script files are [generate_telemetry.py](generate_telemetry.py) and [load_telemetry.py](load_telemetry.py). Screenshots of the generator, query results, and row count are in the [evidence gallery](evidence/README.md).
 

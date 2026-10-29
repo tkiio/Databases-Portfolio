@@ -1,10 +1,3 @@
 # Reflection 2
 
-_Write this after the lab in your own words. Keep it brief and specific._
-
-- What worked?
-- What broke or was difficult?
-- How did my mental model of entities, keys, or cardinality shift?
-- What did I verify in SQL or in the schema?
-- What did I learn from a peer, and what help did I give?
-- Is there a question I should take to a peer or instructor?
+The legacy-schema audit helped me see why a database needs more than tables and columns: keys and relationships need to be enforced. I ran the queries and found an orphan job, a duplicated part number, and a comma-separated parts list that caused a join to miss a job. I also learned that storing prices as text can give incorrect comparison results, and that checking a date’s format does not prove it is a valid date. The most difficult part was tellling the difference between what the data seemed to mean from what the schema actually guaranteed.My pod helped me understand cardinality,entities, attributes, relationships, inheritance and generalization and I helped by explaining why a comma-separated list breaks 1NF. I verified the findings by running the SQL queries and reviewing the schema. My unanswered question would be how can someone ensure every machine belongs to exactly one subtype in the separate-table inheritance design? 

@@ -20,3 +20,4 @@
 - [Additional readings-per-machine capture](query-readings-per-machine-copy.png)
 - [LLM query and query plan](llm-query-and-plan.png)
 - [LLM broken-filter check](llm-broken-like-filter.png)
+
