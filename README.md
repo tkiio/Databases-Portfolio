@@ -24,3 +24,5 @@ This repository collects my notes, exercises, reflections, and evidence from the
 - Ryan Reilly Oduory — [portfolio](https://github.com/reilly-codes/Database-class)
 - Trevor Fidel Nyongesa — [portfolio](https://github.com/TrevorFidel/Database-HSBI)
 
+Author : Trevor Kiio
+
