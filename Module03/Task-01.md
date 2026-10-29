@@ -1,6 +1,6 @@
 # LLM prompt
 
-Use the reference query in step 2 as though the model had produced it, and critique it: is the year filter in the right place? Is the customer count really distinct? Does the query still answer the question when a customer has no orders? The verification work — which is the actual skill — is identical, and a podmate's model output works just as well.
+''Use the reference query in step 2 as though the model had produced it, and critique it: is the year filter in the right place? Is the customer count really distinct? Does the query still answer the question when a customer has no orders? The verification work — which is the actual skill — is identical, and a podmate's model output works just as well.''
 # LLM'S sql
 
 SELECT c.city, COUNT(DISTINCT c.customer_id) AS customers,
@@ -15,7 +15,7 @@ GROUP BY c.city
 ORDER BY revenue DESC;
 
 # Predicted Query Plan
-Prediction: I expect SQLite to scan orders to find rows from 2025. For each matching order, I expect it to search customer by customer_id, order_line by order_id, and product by product_id. I expect temporary work for grouping by city, counting distinct customers, and sorting by revenue.
+Prediction: I expected SQLite to scan orders to find rows from 2025. For each matching order, I expected it to search customer by customer_id, order_line by order_id, and product by product_id. I expected temporary work for grouping by city, counting distinct customers, and sorting by revenue from the product.
 
 # Actual Query PLan
 QUERY PLAN
@@ -29,4 +29,4 @@ QUERY PLAN
 
 # CORRECTNESS NOTE 
 
-The query ran and returned one row per city, counting distinct customers and summing quantity × product price for 2025 orders. The plan scans order_line, searches orders, customer, and product by their primary keys, and uses temporary B-trees for grouping, distinct counting, and sorting. Each city shows 500 customers; I should check whether that matches the data rather than assume it is correct.
+The query ran and returned one row per city, counting distinct customers and summing quantity × product price for 2025 orders. The plan scans order_line, searches orders, customer, and product by their primary keys, and uses temporary B-trees for grouping, distinct counting, and sorting. Each city shows 500 customers; I should check whether that matches the data rather than assume it is correct. 
