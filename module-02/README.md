@@ -2,6 +2,19 @@
 
 This module studies entities, keys, relationships, cardinality, normalization, and integrity constraints by auditing a deliberately flawed maintenance database.
 
+🎯 Learning Goals
+
+This module gives you the opportunity to explore conceptual data modeling and requirements analysis and achieve competency in reading, critiquing, and formalizing a data model.
+
+By the end of this module, you can:
+
+- Reconstruct an ER/EER model (entities, attributes, keys, relationships, cardinalities) from an undocumented SQL schema.
+- Identify integrity defects — missing foreign keys, orphan rows, redundant data, normalization violations — with queries, not intuition.
+- Distinguish an entity relationship from an attribute, and a surrogate key from a natural key, and justify the choice.
+- Express a schema as a code-first data contract (Pydantic / SQLAlchemy) that an application can enforce.
+- Write the requirements the schema forgot: the business rules nobody encoded.
+
+
 ## Portfolio evidence
 
 - [Study log](study-log.md) — references, findings, four ER sketches, and a verified sensor-count proof.
