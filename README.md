@@ -1,7 +1,7 @@
 # Trevor Kiio — HSBI Databases Portfolio
 
 This repository collects my notes, exercises, reflections, and evidence from the HSBI Databases course. 
-## Course work
+## Table of Contents
 
 - [Module 1 ](module-01/README.md)
 - [Module 2 ](module-02/README.md) 
