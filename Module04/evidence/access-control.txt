@@ -1,0 +1,55 @@
+Task 4: view, file permissions, and read-only connections
+Agent-run experiment; student reproduction/pod discussion is separate.
+Measured UTC: 2026-11-11T15:02:30.138339+00:00
+Python 3.14.8; Python SQLite 3.53.1
+Platform: Darwin arm64
+
+CLI SQLite: 3.54.0 2026-04-09 12:25:13 8fa8248e303219400c646a885e36dfc52eae33d83f4412e3f369b2be5373aapl (64-bit)
+CREATE VIEW machine_health AS
+SELECT s.machine_id, s.metric, MAX(r.value) AS peak, COUNT(*) AS n
+FROM sensor AS s JOIN reading AS r USING (sensor_id)
+GROUP BY s.machine_id, s.metric;
+
+SELECT * FROM machine_health ORDER BY machine_id,metric;
+machine_id | metric | peak | n
+('cnc-01', 'temp_c', 42.0, 2)
+('cnc-01', 'vib_rms', 2.8, 3)
+
+chmod 444 Module04/edge.db
+Observed file mode: 0o444
+sqlite3 /Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module04/edge.db 'SELECT COUNT(*) FROM reading;'
+Exit status: 0
+5
+
+sqlite3 /Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module04/edge.db 'DELETE FROM reading;'
+Exit status: 1
+
+Error in 2nd command line argument: attempt to write a readonly database
+
+sqlite3 file:///Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module04/edge.db?mode=ro 'SELECT COUNT(*) FROM reading;'
+Exit status: 0
+5
+
+sqlite3 file:///Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module04/edge.db?mode=ro 'DELETE FROM reading;'
+Exit status: 1
+
+Error in 2nd command line argument: attempt to write a readonly database
+
+Restore original write permissions (normally chmod 644 Module04/edge.db)
+Observed file mode: 0o644
+Now the FILE is writable; mode=ro alone still refuses a DELETE.
+sqlite3 file:///Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module04/edge.db?mode=ro 'DELETE FROM reading;'
+Exit status: 1
+
+Error in 2nd command line argument: attempt to write a readonly database
+
+A read-only reader can STILL read the base table: a view is not an access boundary.
+sqlite3 file:///Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module04/edge.db?mode=ro 'SELECT sensor_id,ts,value FROM reading LIMIT 1;'
+Exit status: 0
+1|2026-03-01 08:00:00|41.7
+
+sqlite3 /Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module04/edge.db 'PRAGMA query_only=ON; DELETE FROM reading;'
+Exit status: 1
+
+Error in 2nd command line argument: attempt to write a readonly database
+

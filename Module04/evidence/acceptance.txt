@@ -1,0 +1,98 @@
+Task A: unconstrained acceptance and guarded rejection
+Agent-run experiment; student reproduction/pod discussion is separate.
+Measured UTC: 2026-11-11T15:02:30.046844+00:00
+Python 3.14.8; Python SQLite 3.53.1
+Platform: Darwin arm64
+
+CREATE TABLE t(sensor_id INTEGER, metric TEXT, value REAL);
+Accepted.
+
+INSERT INTO t VALUES (1,'temp_c',9000), (1,'temp_c','hot'), (2,'bogus',-500);
+Accepted.
+
+SELECT *, typeof(value) AS stored_type FROM t;
+sensor_id | metric | value | stored_type
+(1, 'temp_c', 9000.0, 'real')
+(1, 'temp_c', 'hot', 'text')
+(2, 'bogus', -500.0, 'real')
+
+CREATE TABLE guarded(sensor_id INTEGER PRIMARY KEY, metric TEXT NOT NULL CHECK(metric IN ('temp_c','vib_rms','spindle_load')), value REAL NOT NULL CHECK(value BETWEEN -273.15 AND 5000)) STRICT;
+Accepted.
+
+Integrity layer: domain
+INSERT INTO guarded VALUES (1,'temp_c',9000);
+IntegrityError: CHECK constraint failed: value BETWEEN -273.15 AND 5000
+Expected rejection observed.
+
+Integrity layer: domain/type
+INSERT INTO guarded VALUES (1,'temp_c','hot');
+IntegrityError: cannot store TEXT value in REAL column guarded.value
+Expected rejection observed.
+
+Integrity layer: domain/metric
+INSERT INTO guarded VALUES (2,'bogus',-500);
+IntegrityError: CHECK constraint failed: metric IN ('temp_c','vib_rms','spindle_load')
+Expected rejection observed.
+
+Integrity layer: domain/range
+INSERT INTO guarded VALUES (2,'temp_c',-500);
+IntegrityError: CHECK constraint failed: value BETWEEN -273.15 AND 5000
+Expected rejection observed.
+
+Integrity layer: entity/completeness
+INSERT INTO guarded VALUES (2,NULL,20);
+IntegrityError: NOT NULL constraint failed: guarded.metric
+Expected rejection observed.
+
+Integrity layer: entity/completeness
+INSERT INTO guarded VALUES (2,'temp_c',NULL);
+IntegrityError: NOT NULL constraint failed: guarded.value
+Expected rejection observed.
+
+INSERT INTO guarded VALUES (1,'temp_c',41.5);
+Accepted.
+
+Integrity layer: entity/identity
+INSERT INTO guarded VALUES (1,'vib_rms',1.4);
+IntegrityError: UNIQUE constraint failed: guarded.sensor_id
+Expected rejection observed.
+
+INSERT INTO guarded VALUES (3,'temp_c','41.5');
+Accepted.
+
+INSERT INTO guarded VALUES (4,'temp_c',120);
+Accepted.
+
+120 could be wrong for a particular machine but passes this broad rule.
+INSERT INTO guarded VALUES (NULL,'temp_c',42);
+Accepted.
+
+INTEGER PRIMARY KEY with NULL auto-allocates an ID in SQLite.
+SELECT *, typeof(value) AS stored_type FROM guarded;
+sensor_id | metric | value | stored_type
+(1, 'temp_c', 41.5, 'real')
+(3, 'temp_c', 41.5, 'real')
+(4, 'temp_c', 120.0, 'real')
+(5, 'temp_c', 42.0, 'real')
+
+CREATE TABLE nullable_check(value REAL CHECK(value BETWEEN -273.15 AND 5000)) STRICT;
+Accepted.
+
+INSERT INTO nullable_check VALUES (NULL);
+Accepted.
+
+SELECT value, value BETWEEN -273.15 AND 5000 AS check_result FROM nullable_check;
+value | check_result
+(None, None)
+
+CREATE TABLE nullable_unique(machine TEXT, metric TEXT, UNIQUE(machine,metric)) STRICT;
+Accepted.
+
+INSERT INTO nullable_unique VALUES ('cnc-01',NULL), ('cnc-01',NULL);
+Accepted.
+
+SELECT COUNT(*) AS accepted_null_pairs FROM nullable_unique;
+accepted_null_pairs
+(2,)
+
+The main sensor table avoids this UNIQUE+NULL gap using NOT NULL.

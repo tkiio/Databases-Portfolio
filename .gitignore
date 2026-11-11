@@ -2,6 +2,8 @@
 .venv/
 *.db
 *.db-journal
+*.db-wal
+*.db-shm
 *.duckdb
 *.parquet
 module-01/telemetry.csv

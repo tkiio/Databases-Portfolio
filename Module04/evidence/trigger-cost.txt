@@ -1,0 +1,30 @@
+Trigger cost: agent-run experiment on this laptop
+Measured UTC: 2026-11-11T15:02:30.189398+00:00
+Python: 3.14.8 SQLite: 3.53.1
+Platform: Darwin arm64
+Rows per transaction: 10000 measured repetitions: 5
+Enforced and checked: journal_mode=delete, synchronous=FULL; both cases identical.
+One unrecorded warm-up per case; paired order alternates per repetition.
+Times include INSERT + COMMIT; setup, connection, row building excluded.
+
+Vibration 1.4 mm/s: no alarm
+Without trigger
+  runs_ms: 5.115, 5.237, 5.191, 5.384, 5.431
+  median_ms: 5.237
+With trigger
+  runs_ms: 8.482, 8.284, 9.250, 9.321, 11.096
+  median_ms: 9.250
+  with/without median ratio: 1.766x
+  alarm rows with trigger: 0
+
+Vibration 2.7 mm/s: alarm fires
+Without trigger
+  runs_ms: 5.641, 5.080, 5.510, 5.105, 5.181
+  median_ms: 5.181
+With trigger
+  runs_ms: 12.007, 12.003, 11.678, 12.294, 11.567
+  median_ms: 12.003
+  with/without median ratio: 2.317x
+  alarm rows with trigger: 10000
+
+These are local measurements, not a universal trigger overhead.

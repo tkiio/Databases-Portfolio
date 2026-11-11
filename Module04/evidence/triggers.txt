@@ -1,0 +1,54 @@
+Task 3: alarm, audit, and counterexamples
+Agent-run experiment; student reproduction/pod discussion is separate.
+Measured UTC: 2026-11-11T15:02:30.136570+00:00
+Python 3.14.8; Python SQLite 3.53.1
+Platform: Darwin arm64
+
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (2,'2026-03-01 09:00:00',2.7,1);
+Accepted.
+
+UPDATE reading SET value=1.4 WHERE sensor_id=2 AND ts='2026-03-01 09:00:00';
+Accepted.
+
+SELECT * FROM alarm;
+alarm_id | sensor_id | ts | value | reason
+(1, 2, '2026-03-01 09:00:00', 2.7, 'vibration over 2.0 mm/s')
+
+SELECT * FROM audit;
+audit_id | reading_id | old_value | new_value | changed_at
+(1, 5, 2.7, 1.4, '2026-11-11 15:02:30')
+
+Counterexample 1: unchanged value still creates an audit row.
+UPDATE reading SET value=value WHERE sensor_id=2 AND ts='2026-03-01 09:00:00';
+Accepted.
+
+SELECT * FROM audit;
+audit_id | reading_id | old_value | new_value | changed_at
+(1, 5, 2.7, 1.4, '2026-11-11 15:02:30')
+(2, 5, 1.4, 1.4, '2026-11-11 15:02:30')
+
+Counterexample 2: UPSERT corrects a low vibration upward; INSERT alarm does not fire.
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (2,'2026-03-01 10:01:00',2.8,1) ON CONFLICT(sensor_id,ts) DO UPDATE SET value=excluded.value;
+Accepted.
+
+SELECT * FROM alarm;
+alarm_id | sensor_id | ts | value | reason
+(1, 2, '2026-03-01 09:00:00', 2.7, 'vibration over 2.0 mm/s')
+
+SELECT * FROM audit;
+audit_id | reading_id | old_value | new_value | changed_at
+(1, 5, 2.7, 1.4, '2026-11-11 15:02:30')
+(2, 5, 1.4, 1.4, '2026-11-11 15:02:30')
+(3, 4, 1.4, 2.8, '2026-11-11 15:02:30')
+
+Counterexample 3: the audit table is writable. Mutation rolled back after proving it.
+UPDATE audit SET new_value=999 WHERE audit_id=1;
+Accepted.
+
+SELECT audit_id,new_value FROM audit WHERE audit_id=1;
+audit_id | new_value
+(1, 999.0)
+
+ROLLBACK TO audit_probe;
+Accepted.
+

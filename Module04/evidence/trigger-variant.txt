@@ -1,0 +1,45 @@
+Python: 3.14.8
+SQLite (Python library): 3.53.1
+Isolated in-memory databases; no changes to edge.db.
+
+=== BEFORE INSERT ===
+CREATE TRIGGER trg_vib_alarm
+BEFORE INSERT ON reading
+FOR EACH ROW
+WHEN NEW.value > 2.0 AND
+     (SELECT metric FROM sensor WHERE sensor_id = NEW.sensor_id) = 'vib_rms'
+BEGIN
+    INSERT INTO alarm(sensor_id, ts, value, reason)
+    VALUES (NEW.sensor_id, NEW.ts, NEW.value, 'vibration over 2.0 mm/s');
+    INSERT INTO trigger_probe SELECT COUNT(*) FROM reading;
+END;
+INSERT INTO reading VALUES (1, 2, '2026-03-01 09:00:00', 2.7, 1);
+alarm rows: [(2, '2026-03-01 09:00:00', 2.7, 'vibration over 2.0 mm/s')]
+reading COUNT(*) observed inside the trigger: [(0,)]
+INSERT INTO reading VALUES (2, 2, '2026-03-01 09:00:01', 9000, 1);
+rejected: CHECK constraint failed: value BETWEEN -273.15 AND 5000
+counts (reading, alarm, probe) before/after rejected insert: (1, 1, 1) (1, 1, 1)
+
+=== AFTER INSERT ===
+CREATE TRIGGER trg_vib_alarm
+AFTER INSERT ON reading
+FOR EACH ROW
+WHEN NEW.value > 2.0 AND
+     (SELECT metric FROM sensor WHERE sensor_id = NEW.sensor_id) = 'vib_rms'
+BEGIN
+    INSERT INTO alarm(sensor_id, ts, value, reason)
+    VALUES (NEW.sensor_id, NEW.ts, NEW.value, 'vibration over 2.0 mm/s');
+    INSERT INTO trigger_probe SELECT COUNT(*) FROM reading;
+END;
+INSERT INTO reading VALUES (1, 2, '2026-03-01 09:00:00', 2.7, 1);
+alarm rows: [(2, '2026-03-01 09:00:00', 2.7, 'vibration over 2.0 mm/s')]
+reading COUNT(*) observed inside the trigger: [(1,)]
+INSERT INTO reading VALUES (2, 2, '2026-03-01 09:00:01', 9000, 1);
+rejected: CHECK constraint failed: value BETWEEN -273.15 AND 5000
+counts (reading, alarm, probe) before/after rejected insert: (1, 1, 1) (1, 1, 1)
+
+=== RAISE(ABORT) can reject at either timing ===
+BEFORE RAISE(ABORT): vibration exceeds policy
+persisted reading rows: 0
+AFTER RAISE(ABORT): vibration exceeds policy
+persisted reading rows: 0

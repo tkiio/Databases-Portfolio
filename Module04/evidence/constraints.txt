@@ -1,0 +1,66 @@
+Task 1: constraints and generated column
+Agent-run experiment; student reproduction/pod discussion is separate.
+Measured UTC: 2026-11-11T15:02:30.047437+00:00
+Python 3.14.8; Python SQLite 3.53.1
+Platform: Darwin arm64
+
+PRAGMA foreign_keys;
+foreign_keys
+(1,)
+
+INSERT INTO sensor VALUES (1,'cnc-01','temp_c','degC'), (2,'cnc-01','vib_rms','mm/s');
+Accepted.
+
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (1,'2026-03-01 08:00:00',41.5,1);
+Accepted.
+
+Integrity layer: domain/range
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (1,'2026-03-01 08:00:01',9000,1);
+IntegrityError: CHECK constraint failed: value >= -273.15 AND value <= 5000
+Expected rejection observed.
+
+Integrity layer: domain/type
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (1,'2026-03-01 08:00:02','hot',1);
+IntegrityError: cannot store TEXT value in REAL column reading.value
+Expected rejection observed.
+
+Integrity layer: referential
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (99,'2026-03-01 08:00:03',40,1);
+IntegrityError: FOREIGN KEY constraint failed
+Expected rejection observed.
+
+Integrity layer: entity/uniqueness
+INSERT INTO sensor VALUES (3,'cnc-01','temp_c','degC');
+IntegrityError: UNIQUE constraint failed: sensor.machine_id, sensor.metric
+Expected rejection observed.
+
+Integrity layer: entity/primary key
+INSERT INTO sensor VALUES (1,'cnc-02','temp_c','degC');
+IntegrityError: UNIQUE constraint failed: sensor.sensor_id
+Expected rejection observed.
+
+Integrity layer: entity/completeness
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (1,NULL,40,1);
+IntegrityError: NOT NULL constraint failed: reading.ts
+Expected rejection observed.
+
+Integrity layer: domain/interval
+INSERT INTO reading(sensor_id,ts,value,interval_s) VALUES (1,'2026-03-01 08:00:04',40,0);
+IntegrityError: CHECK constraint failed: interval_s > 0
+Expected rejection observed.
+
+Integrity layer: domain/metric
+INSERT INTO sensor VALUES (3,'cnc-03','bogus','?');
+IntegrityError: CHECK constraint failed: metric IN ('temp_c', 'vib_rms', 'spindle_load')
+Expected rejection observed.
+
+SELECT reading_id,sensor_id,ts,value,interval_s,energy_j FROM reading;
+reading_id | sensor_id | ts | value | interval_s | energy_j
+(1, 1, '2026-03-01 08:00:00', 41.5, 1, 41.5)
+
+INSERT INTO reading(sensor_id,ts,value,interval_s,energy_j) VALUES (1,'2026-03-01 08:00:05',40,1,999);
+OperationalError: cannot INSERT into generated column "energy_j"
+Expected rejection observed.
+
+Generated arithmetic = 41.5 * 1 = 41.5. Temperature * time is not energy;
+the supplied energy_j label is physically misleading for these metrics.
