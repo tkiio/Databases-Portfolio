@@ -1,6 +1,6 @@
 # Module 4 — Integrity at the edge
 
-This module makes a local SQLite database check its own data. A faulty sensor or a replayed CSV should not silently create invalid or duplicate readings.
+In this module, my focus is on how a database checks the data it receives. The main idea I want to remember is that creating a table is only the beginning. It also needs rules that reject invalid values and stop duplicate readings.
 
 ## Learning goals
 
@@ -12,38 +12,45 @@ By the end of this module, you can:
 4. Use DML, including `UPSERT ... ON CONFLICT`, for ingestion without duplicate readings.
 5. Explain how server access control differs from permissions and read-only connections in a local SQLite application.
 
-## What is ready
+## My work and evidence
 
-| Task | Evidence | Status |
-| --- | --- | --- |
-| A: unconstrained/guarded tables, NULL and type experiments | [Study notes](integrity-notes.md), [actual output](evidence/acceptance.txt) | Automated experiment complete; personal/pod study still to record |
-| B: share with another pod | [Discussion section](integrity-notes.md#agreed-learning-pod-discussion) | Not yet — requires the actual discussion |
-| 1: prove constraints and generated arithmetic | [Setup SQL](setup.sql), [rejections and generated value](evidence/constraints.txt) | Complete |
-| 2: UPSERT and CSV replay | [UPSERT](upsert.sql), [Python loader](ingest.py), [synthetic fixture](readings.csv), [double-run counts](evidence/upsert.txt) | Complete |
-| 3: alarms, audit and measured cost | [Trigger DDL](triggers.sql), [alarm/audit output](evidence/triggers.txt), [benchmark](bench.py), [measurements](evidence/trigger-cost.txt) | Complete, including deliberate counterexamples |
-| 4: view and access control | [View SQL](machine_health.sql), [commands and outcomes](evidence/access-control.txt), [comparison](integrity-notes.md#access-control-comparison) | Complete |
-| 5: optional BEFORE/AFTER comparison | [Explanation](trigger-variant.md), [script](trigger_variant.py), [output](evidence/trigger-variant.txt) | Complete |
-| Reflection | [Reflection 4 draft](../Reflections/ref04.md) | Draft — add personal experience after reviewing/reproducing |
+| Task | My files and results |
+| --- | --- |
+| A: compare a table with and without constraints | [Integrity notes](integrity-notes.md), [accepted and rejected rows](evidence/acceptance.txt) |
+| B: exchange findings with another pod | [Pod discussion](integrity-notes.md#agreed-learning-pod-discussion) — neighbouring-pod feedback still to add |
+| 1: prove the constraints work | [Setup](setup.sql), [exact errors and generated value](evidence/constraints.txt) |
+| 2: load a CSV twice without duplicates | [UPSERT SQL](upsert.sql), [Python loader](ingest.py), [sample CSV](readings.csv), [row counts](evidence/upsert.txt) |
+| 3: alarms, audit and trigger cost | [Triggers](triggers.sql), [alarm and audit results](evidence/triggers.txt), [benchmark](bench.py), [timings](evidence/trigger-cost.txt) |
+| 4: access control | [Reporting view](machine_health.sql), [read-only results](evidence/access-control.txt), [comparison with PostgreSQL](integrity-notes.md#access-control-comparison) |
+| 5: optional BEFORE/AFTER comparison | [My explanation](trigger-variant.md), [script](trigger_variant.py), [results](evidence/trigger-variant.txt) |
+| Reflection | [Reflection 4](../Reflections/ref04.md) |
 
-The scripts and captured results were prepared and run with Codex on this laptop. They demonstrate program behaviour; they do not claim that I completed a pod discussion or personally ran each command. The CSV is synthetic test data, not real plant telemetry.
+The CSV is a small generated example for the lab.
 
-## Reproduce everything
+## What I want to remember
 
-Use the terminal in the repository root, with the existing `uv` environment and `sqlite3` available:
+- `CHECK` and `NOT NULL` do different jobs. A CHECK by itself can still allow NULL.
+- A foreign key makes sure the sensor exists before its reading is accepted.
+- The unique sensor/timestamp pair stops a replay from creating another reading.
+- INSERT and UPDATE are different events, so an insert-only alarm can miss an UPSERT update.
+- A trigger adds work to each write. The timings show why that cost matters.
+- A read-only connection prevents changes, but it can still read the underlying tables.
+
+## Running my lab
+
+From the portfolio's top folder:
 
 ```sh
 uv run python Module04/run_lab.py
 ```
 
-The script builds `edge.db`, executes the experiments, records exact errors and results in `evidence/`, measures two 10,000-row trigger workloads, and runs the optional trigger comparison. It enables foreign keys for every database-writing connection. An existing `edge.db` makes it stop, so it cannot silently erase an earlier lab.
-
-To deliberately rebuild **this module's lab data** and refresh its evidence:
+This creates `edge.db` and saves the results in `evidence/`. If the database already exists, the script stops. To rebuild the lab and replace its existing data:
 
 ```sh
 uv run python Module04/run_lab.py --reset
 ```
 
-`--reset` erases the lab tables and their contents. Independent reruns of the smaller experiments are:
+I can also run the loader, benchmark and optional experiment separately:
 
 ```sh
 uv run python Module04/ingest.py
@@ -51,15 +58,15 @@ uv run python Module04/bench.py
 uv run python Module04/trigger_variant.py
 ```
 
-The loader assumes the schema, sensors and unique index have already been created by `run_lab.py`. Running the loader after the full lab may update the deliberately changed test values, and the course audit trigger logs replayed updates. Use a full rebuild to reproduce the saved sequence exactly.
+The loader needs the tables, sensors and unique index created by the full lab. Running it afterwards can update the test values again and add audit entries. A full rebuild reproduces the saved sequence.
 
-## Read the database
+## Opening the database
 
 ```sh
 sqlite3 Module04/edge.db
 ```
 
-Then enter these at the SQLite prompt:
+At the SQLite prompt:
 
 ```sql
 PRAGMA foreign_keys = ON;
@@ -73,22 +80,10 @@ SELECT * FROM machine_health;
 .quit
 ```
 
-`edge.db` is a binary database: inspect it with SQLite rather than editing it as text in VS Code. The final demonstration contains five readings, one alarm, and three audit entries, including the intentional counterexamples.
+The final lab contains five readings, one alarm and three audit entries. I need to open the `.db` file through SQLite because it is a binary database file.
 
-## Key findings to explain
+## Files to commit
 
-- `CHECK` alone accepts `NULL`; use `NOT NULL` when a value is required.
-- `STRICT` accepts a numeric string if it can convert it without losing information.
-- A replay leaves reading counts unchanged because `(sensor_id, ts)` is unique.
-- The course alarm handles inserts only; an UPSERT update can miss it.
-- The sample audit logs unchanged values and can be edited by a writer. It is not immutable.
-- `energy_j = value * interval_s` demonstrates generated arithmetic. For these temperature/vibration/load metrics, the result is not physically an energy measurement.
-- A read-only connection blocks writes but still permits direct reads of base tables.
+The scripts, notes, evidence text files and small sample CSV belong in the portfolio. `edge.db`, its journal files, `.venv/` and `.env` stay out of Git. The scripts let someone rebuild the database.
 
-See the [study notes](integrity-notes.md) for explanations, sources, and remaining questions.
-
-## What goes into Git
-
-Commit the `.sql`, `.py`, `.md`, evidence `.txt` files and the small synthetic `readings.csv`. Keep `edge.db`, its journal/WAL files, `.venv/` and `.env` out of Git. The database is rebuilt from the scripts; the evidence records what actually happened.
-
-[Portfolio home](../README.md) · [Reflections](../Reflections/README.md) · [Course materials](https://github.com/iotempire/iotempire-teaching/tree/main/full-classes/hsbi-databases-10d)
+[Portfolio home](../README.md) · [My notes](integrity-notes.md) · [Reflection 4](../Reflections/ref04.md) · [Course materials](https://github.com/iotempire/iotempire-teaching/tree/main/full-classes/hsbi-databases-10d)

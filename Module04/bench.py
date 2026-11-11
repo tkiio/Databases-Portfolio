@@ -48,7 +48,7 @@ def benchmark(value: float, enabled: bool) -> float:
 
 
 def main() -> None:
-    print("Trigger cost: agent-run experiment on this laptop")
+    print("Trigger cost: 10,000-row ingest comparison")
     print("Measured UTC:", datetime.now(timezone.utc).isoformat())
     print("Python:", sys.version.split()[0], "SQLite:", sqlite3.sqlite_version)
     print("Platform:", platform.system(), platform.machine())

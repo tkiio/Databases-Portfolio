@@ -1,0 +1,141 @@
+Module 5: query, update and storage measurements
+Measured UTC: 2026-11-11T17:48:18.693295+00:00
+Python 3.14.8; Python SQLite 3.53.1
+CLI SQLite: 3.54.0 2026-04-09 12:25:13 8fa8248e303219400c646a885e36dfc52eae33d83f4412e3f369b2be5373aapl (64-bit)
+Platform: Darwin arm64
+Warm-up: 1 per query; measured runs: 5; alternating order; fetchall inside timer.
+No ANALYZE; cached_statements=0 to prepare fresh plans after index changes.
+journal_mode=DELETE, synchronous=FULL (set and checked). No other machine workload controlled.
+
+Round 4: report machine index present
+Both result sets match exactly.
+Groups: 350; total cost: 722610.0
+normalized runs_ms: 28.370, 27.468, 28.467, 27.542, 28.130
+normalized median_ms: 28.130
+normalized EXPLAIN QUERY PLAN:
+  SCAN jp
+  SEARCH j USING INTEGER PRIMARY KEY (rowid=?)
+  SEARCH m USING INDEX sqlite_autoindex_machine_1 (machine_id=?)
+  SEARCH p USING INDEX sqlite_autoindex_part_1 (part_no=?)
+  USE TEMP B-TREE FOR GROUP BY
+report runs_ms: 26.815, 27.474, 27.064, 27.040, 27.443
+report median_ms: 27.064
+report EXPLAIN QUERY PLAN:
+  SCAN report_jobpart USING INDEX ix_report_machine
+  USE TEMP B-TREE FOR GROUP BY
+
+Round 5: site updates, one warm-up then five timed update+commit runs
+{
+  "original_site": "G\u00fctersloh",
+  "new_site": "Bielefeld",
+  "normalized": {
+    "sql": "UPDATE machine SET site=? WHERE machine_id=?",
+    "runs_ms": [
+      0.22387492936104536,
+      0.23437500931322575,
+      0.23904209956526756,
+      0.2424169797450304,
+      0.23224996402859688
+    ],
+    "median_ms": 0.23437500931322575,
+    "rows_touched": 1
+  },
+  "stale_report_rows_before_sync": 4000,
+  "report": {
+    "sql": "UPDATE report_jobpart SET site=? WHERE machine_id=?",
+    "runs_ms": [
+      10.60562499333173,
+      8.916958002373576,
+      8.688249974511564,
+      8.768290979787707,
+      8.851250051520765
+    ],
+    "median_ms": 8.851250051520765,
+    "rows_touched": 4000
+  }
+}
+After the normalized change alone, 4,000 report rows were stale.
+Updating the copy fixed the mismatch. Both sites were then restored.
+
+Round 5: report machine index removed
+Both result sets match exactly.
+Groups: 350; total cost: 722610.0
+normalized runs_ms: 28.364, 27.142, 27.296, 29.390, 27.166
+normalized median_ms: 27.296
+normalized EXPLAIN QUERY PLAN:
+  SCAN jp
+  SEARCH j USING INTEGER PRIMARY KEY (rowid=?)
+  SEARCH m USING INDEX sqlite_autoindex_machine_1 (machine_id=?)
+  SEARCH p USING INDEX sqlite_autoindex_part_1 (part_no=?)
+  USE TEMP B-TREE FOR GROUP BY
+report runs_ms: 19.796, 19.616, 19.937, 19.804, 21.836
+report median_ms: 19.804
+report EXPLAIN QUERY PLAN:
+  SCAN report_jobpart
+  USE TEMP B-TREE FOR GROUP BY
+
+Storage: bytes per design (flat source and wider experiment excluded)
+With report index: {
+  "normalized": {
+    "table_bytes": 4071424,
+    "table_and_index_bytes": 8167424,
+    "indexes": [
+      "sqlite_autoindex_machine_1",
+      "sqlite_autoindex_part_1",
+      "sqlite_autoindex_job_part_1"
+    ]
+  },
+  "report": {
+    "table_bytes": 11091968,
+    "table_and_index_bytes": 14082048,
+    "indexes": [
+      "ix_report_machine"
+    ]
+  }
+}
+Without report index: {
+  "normalized": {
+    "table_bytes": 4071424,
+    "table_and_index_bytes": 8167424,
+    "indexes": [
+      "sqlite_autoindex_machine_1",
+      "sqlite_autoindex_part_1",
+      "sqlite_autoindex_job_part_1"
+    ]
+  },
+  "report": {
+    "table_bytes": 11091968,
+    "table_and_index_bytes": 11091968,
+    "indexes": []
+  }
+}
+
+Optional: two additional dimensions, no report index
+Both result sets match exactly.
+Groups: 3500; total cost: 722610.0
+normalized runs_ms: 48.007, 48.368, 47.975, 47.623, 51.203
+normalized median_ms: 48.007
+normalized EXPLAIN QUERY PLAN:
+  SCAN jp
+  SEARCH j USING INTEGER PRIMARY KEY (rowid=?)
+  SEARCH m USING INDEX sqlite_autoindex_machine_1 (machine_id=?)
+  SEARCH sd USING INDEX sqlite_autoindex_site_dim_1 (site=?)
+  SEARCH p USING INDEX sqlite_autoindex_part_1 (part_no=?)
+  SEARCH v USING INDEX sqlite_autoindex_vendor_1 (part_no=?)
+  USE TEMP B-TREE FOR GROUP BY
+report runs_ms: 37.881, 35.640, 33.434, 33.828, 33.901
+report median_ms: 33.901
+report EXPLAIN QUERY PLAN:
+  SCAN report_jobpart_wide
+  USE TEMP B-TREE FOR GROUP BY
+Wider normalized SQL:
+SELECT m.machine_id,m.site,sd.region,j.technician,v.vendor,SUM(p.part_price) AS cost
+FROM job AS j JOIN machine AS m ON m.machine_id=j.machine_id
+JOIN site_dim AS sd ON sd.site=m.site JOIN job_part AS jp ON jp.job_id=j.job_id
+JOIN part AS p ON p.part_no=jp.part_no JOIN vendor AS v ON v.part_no=p.part_no
+WHERE j.done_on >= date('2026-03-01')
+GROUP BY m.machine_id,m.site,sd.region,j.technician,v.vendor
+Wider report SQL:
+SELECT machine_id,site,region,technician,vendor,SUM(part_price) AS cost
+FROM report_jobpart_wide WHERE done_on >= date('2026-03-01')
+GROUP BY machine_id,site,region,technician,vendor

@@ -1,0 +1,185 @@
+{
+  "python": "3.14.8",
+  "sqlite": "3.53.1",
+  "measured_utc": "2026-11-11T17:48:18.698374+00:00",
+  "indexed": {
+    "runs_ms": {
+      "normalized": [
+        28.37016701232642,
+        27.467708103358746,
+        28.46691699232906,
+        27.54245907999575,
+        28.129750047810376
+      ],
+      "report": [
+        26.81541594211012,
+        27.473959024064243,
+        27.06379198934883,
+        27.040041983127594,
+        27.442708029411733
+      ]
+    },
+    "median_ms": {
+      "normalized": 28.129750047810376,
+      "report": 27.06379198934883
+    },
+    "plans": {
+      "normalized": [
+        "SCAN jp",
+        "SEARCH j USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH m USING INDEX sqlite_autoindex_machine_1 (machine_id=?)",
+        "SEARCH p USING INDEX sqlite_autoindex_part_1 (part_no=?)",
+        "USE TEMP B-TREE FOR GROUP BY"
+      ],
+      "report": [
+        "SCAN report_jobpart USING INDEX ix_report_machine",
+        "USE TEMP B-TREE FOR GROUP BY"
+      ]
+    },
+    "result_groups": 350,
+    "total_cost": 722610.0
+  },
+  "storage_with_index": {
+    "normalized": {
+      "table_bytes": 4071424,
+      "table_and_index_bytes": 8167424,
+      "indexes": [
+        "sqlite_autoindex_machine_1",
+        "sqlite_autoindex_part_1",
+        "sqlite_autoindex_job_part_1"
+      ]
+    },
+    "report": {
+      "table_bytes": 11091968,
+      "table_and_index_bytes": 14082048,
+      "indexes": [
+        "ix_report_machine"
+      ]
+    }
+  },
+  "writes": {
+    "original_site": "G\u00fctersloh",
+    "new_site": "Bielefeld",
+    "normalized": {
+      "sql": "UPDATE machine SET site=? WHERE machine_id=?",
+      "runs_ms": [
+        0.22387492936104536,
+        0.23437500931322575,
+        0.23904209956526756,
+        0.2424169797450304,
+        0.23224996402859688
+      ],
+      "median_ms": 0.23437500931322575,
+      "rows_touched": 1
+    },
+    "stale_report_rows_before_sync": 4000,
+    "report": {
+      "sql": "UPDATE report_jobpart SET site=? WHERE machine_id=?",
+      "runs_ms": [
+        10.60562499333173,
+        8.916958002373576,
+        8.688249974511564,
+        8.768290979787707,
+        8.851250051520765
+      ],
+      "median_ms": 8.851250051520765,
+      "rows_touched": 4000
+    }
+  },
+  "unindexed": {
+    "runs_ms": {
+      "normalized": [
+        28.363666031509638,
+        27.14166697114706,
+        27.295625070109963,
+        29.38974997960031,
+        27.165999985300004
+      ],
+      "report": [
+        19.796457956545055,
+        19.616042030975223,
+        19.936708034947515,
+        19.80374997947365,
+        21.83608408086002
+      ]
+    },
+    "median_ms": {
+      "normalized": 27.295625070109963,
+      "report": 19.80374997947365
+    },
+    "plans": {
+      "normalized": [
+        "SCAN jp",
+        "SEARCH j USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH m USING INDEX sqlite_autoindex_machine_1 (machine_id=?)",
+        "SEARCH p USING INDEX sqlite_autoindex_part_1 (part_no=?)",
+        "USE TEMP B-TREE FOR GROUP BY"
+      ],
+      "report": [
+        "SCAN report_jobpart",
+        "USE TEMP B-TREE FOR GROUP BY"
+      ]
+    },
+    "result_groups": 350,
+    "total_cost": 722610.0
+  },
+  "storage_without_index": {
+    "normalized": {
+      "table_bytes": 4071424,
+      "table_and_index_bytes": 8167424,
+      "indexes": [
+        "sqlite_autoindex_machine_1",
+        "sqlite_autoindex_part_1",
+        "sqlite_autoindex_job_part_1"
+      ]
+    },
+    "report": {
+      "table_bytes": 11091968,
+      "table_and_index_bytes": 11091968,
+      "indexes": []
+    }
+  },
+  "wide": {
+    "runs_ms": {
+      "normalized": [
+        48.0069579789415,
+        48.368167015723884,
+        47.97512502409518,
+        47.623250051401556,
+        51.20250000618398
+      ],
+      "report": [
+        37.88125002756715,
+        35.640417016111314,
+        33.434165990911424,
+        33.8282500160858,
+        33.90062495600432
+      ]
+    },
+    "median_ms": {
+      "normalized": 48.0069579789415,
+      "report": 33.90062495600432
+    },
+    "plans": {
+      "normalized": [
+        "SCAN jp",
+        "SEARCH j USING INTEGER PRIMARY KEY (rowid=?)",
+        "SEARCH m USING INDEX sqlite_autoindex_machine_1 (machine_id=?)",
+        "SEARCH sd USING INDEX sqlite_autoindex_site_dim_1 (site=?)",
+        "SEARCH p USING INDEX sqlite_autoindex_part_1 (part_no=?)",
+        "SEARCH v USING INDEX sqlite_autoindex_vendor_1 (part_no=?)",
+        "USE TEMP B-TREE FOR GROUP BY"
+      ],
+      "report": [
+        "SCAN report_jobpart_wide",
+        "USE TEMP B-TREE FOR GROUP BY"
+      ]
+    },
+    "result_groups": 3500,
+    "total_cost": 722610.0,
+    "sql": {
+      "normalized": "SELECT m.machine_id,m.site,sd.region,j.technician,v.vendor,SUM(p.part_price) AS cost\nFROM job AS j JOIN machine AS m ON m.machine_id=j.machine_id\nJOIN site_dim AS sd ON sd.site=m.site JOIN job_part AS jp ON jp.job_id=j.job_id\nJOIN part AS p ON p.part_no=jp.part_no JOIN vendor AS v ON v.part_no=p.part_no\nWHERE j.done_on >= date('2026-03-01')\nGROUP BY m.machine_id,m.site,sd.region,j.technician,v.vendor",
+      "report": "SELECT machine_id,site,region,technician,vendor,SUM(part_price) AS cost\nFROM report_jobpart_wide WHERE done_on >= date('2026-03-01')\nGROUP BY machine_id,site,region,technician,vendor"
+    }
+  }
+}

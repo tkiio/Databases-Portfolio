@@ -1,0 +1,50 @@
+Round 3: setup and decomposition
+Measured UTC: 2026-11-11T17:48:18.034075+00:00
+Python 3.14.8; Python SQLite 3.53.1
+Executed setup.sql, normalize.sql and report.sql. Foreign keys ON.
+SELECT COUNT(*) FROM flat_jobpart;
+200000
+SELECT COUNT(*) FROM machine;
+50
+SELECT COUNT(*) FROM part;
+10
+SELECT COUNT(*) FROM job;
+20000
+SELECT COUNT(*) FROM job_part;
+200000
+SELECT COUNT(*) FROM report_jobpart;
+200000
+job_id determines machine, technician and date
+SELECT job_id FROM flat_jobpart GROUP BY job_id HAVING COUNT(DISTINCT machine_id)>1 OR COUNT(DISTINCT technician)>1 OR COUNT(DISTINCT done_on)>1;
+0 violating groups
+machine_id determines site
+SELECT machine_id FROM flat_jobpart GROUP BY machine_id HAVING COUNT(DISTINCT site)>1;
+0 violating groups
+part_no determines price
+SELECT part_no FROM flat_jobpart GROUP BY part_no HAVING COUNT(DISTINCT part_price)>1;
+0 violating groups
+job/part is unique
+SELECT job_id,part_no FROM flat_jobpart GROUP BY job_id,part_no HAVING COUNT(*)>1;
+0 violating groups
+Actual four-table join count:
+SELECT j.job_id,m.machine_id,m.site,j.technician,jp.part_no,p.part_price,j.done_on
+FROM job AS j JOIN machine AS m ON m.machine_id=j.machine_id
+JOIN job_part AS jp ON jp.job_id=j.job_id JOIN part AS p ON p.part_no=jp.part_no;
+200000
+Missing reconstructed rows
+SELECT job_id,machine_id,site,technician,part_no,CAST(part_price AS REAL),done_on FROM flat_jobpart EXCEPT SELECT j.job_id,m.machine_id,m.site,j.technician,jp.part_no,p.part_price,j.done_on
+FROM job AS j JOIN machine AS m ON m.machine_id=j.machine_id
+JOIN job_part AS jp ON jp.job_id=j.job_id JOIN part AS p ON p.part_no=jp.part_no;
+0
+Extra reconstructed rows
+SELECT j.job_id,m.machine_id,m.site,j.technician,jp.part_no,p.part_price,j.done_on
+FROM job AS j JOIN machine AS m ON m.machine_id=j.machine_id
+JOIN job_part AS jp ON jp.job_id=j.job_id JOIN part AS p ON p.part_no=jp.part_no EXCEPT SELECT job_id,machine_id,site,technician,part_no,CAST(part_price AS REAL),done_on FROM flat_jobpart;
+0
+Equal counts AND both EXCEPT directions are empty: all facts reconstruct.
+Parts: [('P-0002', 6.0), ('P-0003', 7.0), ('P-0004', 8.0), ('P-0005', 9.0), ('P-0006', 10.0), ('P-0007', 11.0), ('P-0008', 12.0), ('P-0009', 13.0), ('P-0010', 14.0), ('P-0011', 15.0)]
+Counterexample to assuming one technician per machine:
+SELECT machine_id,COUNT(DISTINCT technician) FROM job GROUP BY machine_id HAVING COUNT(DISTINCT technician)>1 LIMIT 1;
+('cnc-01', 7)
+No violations in this generated dataset confirm consistency here, not a permanent business rule.
+PRAGMA foreign_key_check: no violations.

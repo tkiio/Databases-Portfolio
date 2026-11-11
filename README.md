@@ -7,10 +7,12 @@ This repository collects my notes, exercises, reflections, and evidence from the
 - [Module 2 ](module-02/README.md) 
 - [Module 3](Module03)
 - [Module 4](Module04/README.md)
+- [Module 5](Module05/README.md)
 - [Reflection 1](Reflections/ref01.md)
 - [Reflection 2](Reflections/ref02.md)
 - [Reflection 3](Reflections/ref03.md)
-- [Reflection 4 — draft](Reflections/ref04.md)
+- [Reflection 4](Reflections/ref04.md)
+- [Reflection 5](Reflections/ref05.md)
 - [Hardware inventory](Hardware/README.md)
 
 ## Module 1 quick links

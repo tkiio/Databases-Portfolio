@@ -1,11 +1,9 @@
 # Reflection 4
 
-Draft based on the automated Module 4 experiments. Review the evidence and replace the prompts below with personal experience before treating this as a finished logbook entry.
+My main takeaway from this module is that the database needs rules to stop bad data from being stored. A table can accept values that do not make sense if the right constraints are missing. I want to remember that CHECK and NOT NULL do different things, because CHECK on its own can still allow NULL.
 
-The main takeaway to remember is that rules belong in the database as well as in application code. The experiments show different responsibilities: keys identify rows, foreign keys protect relationships, and checks restrict values. A surprising result is that CHECK alone accepts NULL, while STRICT still accepts a numeric string if SQLite can convert it without losing information. The rejection messages make those differences concrete.
+The examples show why it helps to look at the actual output. Loading the same CSV twice kept the reading count at four because of the unique key and UPSERT. The alarm worked for a new high reading, but an UPSERT update could miss it. An update that kept the same value still made an audit entry. These are useful things to check before assuming a trigger covers everything.
 
-The CSV replay kept the reading count at four after both imports because sensor and timestamp form a unique key. The alarm and audit experiments show why it is necessary to test the exact event: an INSERT alarm missed an UPSERT update, and an unchanged value still created an audit entry. Read-only access prevented deletion, but it did not hide the underlying tables. These are useful reminders to verify an AI-generated claim with a counterexample instead of relying only on code that runs successfully.
+Understanding the content was a bit difficult for me. My pod mates and I helped each other understand it, which was helpful. I also helped them with the content, so we were learning from each other.
 
-What worked well for me: [add one experiment I personally reproduced and what helped me understand it]. What was difficult: [add the error, concept or command I struggled with, and what helped]. A useful exploration: [describe one result I found surprising after checking it myself].
-
-Help and interaction: Codex prepared and ran the supplied experiments and drafted the notes. [Add who in my pod or the teaching team helped me, what feedback was valuable, and who I helped; say none if appropriate.] [Add any extra contribution or class presentation I actually made.] A question to discuss is whether a corrected vibration reading that crosses the threshold should create a new alarm, and how unchanged replays should affect the audit trail.
+I got help from Codex with the SQL and Python scripts, running the experiments and understanding the results. The saved errors, row counts and trigger output were used to check what the code actually did. My question is how the alarm should work when an existing reading is corrected and goes above the threshold.

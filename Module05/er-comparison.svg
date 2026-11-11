@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="600" viewBox="0 0 1240 600" role="img" aria-labelledby="title desc">
+<title id="title">Before and after: flat job-part data and a normalized schema</title>
+<desc id="desc">Left: one flat row identified by job and part repeats machine, site, technician and price. Right: machine has many jobs, job and part each have many job-part associations. Site belongs to machine and price belongs to part.</desc>
+<rect width="1240" height="600" fill="white"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#243746;font-size:17px}.heading{font-size:22px;font-weight:bold}.name{font-size:18px;font-weight:bold;fill:white}.small{font-size:15px;fill:#425466}</style>
+<text class="heading" x="35" y="42">Before: one flat table</text>
+<text class="heading" x="500" y="42">After: separate tables in 3NF</text>
+<line x1="445" y1="24" x2="445" y2="562" stroke="#cbd5df"/>
+<rect x="35" y="110" width="365" height="234" rx="5" fill="#f6f8fa" stroke="#8294a6"/>
+<rect x="35" y="110" width="365" height="38" rx="5" fill="#315a7d"/>
+<text class="name" x="49" y="135">FLAT_JOBPART</text>
+<text x="49" y="174">PK: job_id + part_no</text>
+<text x="49" y="204">machine_id</text>
+<text x="49" y="234">site</text>
+<text x="49" y="264">technician</text>
+<text x="49" y="294">part_price</text>
+<text x="49" y="324">done_on</text>
+<text class="small" x="35" y="395">Proposed key; the flat table does not enforce it.</text>
+<text class="small" x="35" y="424">Site and price repeat across many rows.</text>
+<text class="small" x="35" y="453">A partial edit can leave conflicting copies.</text>
+<rect x="500" y="95" width="235" height="114" rx="5" fill="#f6f8fa" stroke="#8294a6"/>
+<rect x="500" y="95" width="235" height="38" rx="5" fill="#315a7d"/>
+<text class="name" x="514" y="120">MACHINE</text>
+<text x="514" y="159">PK: machine_id</text>
+<text x="514" y="189">site</text>
+<rect x="930" y="95" width="270" height="174" rx="5" fill="#f6f8fa" stroke="#8294a6"/>
+<rect x="930" y="95" width="270" height="38" rx="5" fill="#315a7d"/>
+<text class="name" x="944" y="120">JOB</text>
+<text x="944" y="159">PK: job_id</text>
+<text x="944" y="189">FK: machine_id</text>
+<text x="944" y="219">technician</text>
+<text x="944" y="249">done_on</text>
+<rect x="500" y="360" width="235" height="114" rx="5" fill="#f6f8fa" stroke="#8294a6"/>
+<rect x="500" y="360" width="235" height="38" rx="5" fill="#315a7d"/>
+<text class="name" x="514" y="385">PART</text>
+<text x="514" y="424">PK: part_no</text>
+<text x="514" y="454">part_price</text>
+<rect x="930" y="360" width="270" height="114" rx="5" fill="#f6f8fa" stroke="#8294a6"/>
+<rect x="930" y="360" width="270" height="38" rx="5" fill="#315a7d"/>
+<text class="name" x="944" y="385">JOB_PART</text>
+<text x="944" y="424">PK, FK: job_id</text>
+<text x="944" y="454">PK, FK: part_no</text>
+<path d="M735 150 H930" fill="none" stroke="#425466" stroke-width="2"/>
+<text x="754" y="140">1</text><text x="872" y="140">0..*</text>
+<text class="small" x="792" y="176">has jobs</text>
+<path d="M1065 269 V360" fill="none" stroke="#425466" stroke-width="2"/>
+<text x="1079" y="291">1</text><text x="1079" y="347">0..*</text>
+<path d="M735 417 H930" fill="none" stroke="#425466" stroke-width="2"/>
+<text x="754" y="407">1</text><text x="872" y="407">0..*</text>
+<text class="small" x="770" y="445">appears in jobs</text>
+<text class="small" x="500" y="535">The job-part key contains both columns.</text>
+<text class="small" x="500" y="563">machine_id → site still holds; the site fact now lives in MACHINE.</text>
+</svg>

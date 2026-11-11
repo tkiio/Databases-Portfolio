@@ -1,5 +1,4 @@
 Task 4: view, file permissions, and read-only connections
-Agent-run experiment; student reproduction/pod discussion is separate.
 Measured UTC: 2026-11-11T15:02:30.138339+00:00
 Python 3.14.8; Python SQLite 3.53.1
 Platform: Darwin arm64

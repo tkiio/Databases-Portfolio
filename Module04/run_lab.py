@@ -29,7 +29,7 @@ def connect():
 
 
 def header(title):
-    return [title, "Agent-run experiment; student reproduction/pod discussion is separate.",
+    return [title,
             "Measured UTC: " + datetime.now(timezone.utc).isoformat(),
             f"Python {sys.version.split()[0]}; Python SQLite {sqlite3.sqlite_version}",
             f"Platform: {platform.system()} {platform.machine()}", ""]
@@ -279,7 +279,7 @@ def main():
     print("Completed the acceptance experiment and technical Tasks 1-5.")
     print("Actual output saved in Module04/evidence/.")
     print("edge.db: 5 readings; integrity_check=ok; no foreign-key violations.")
-    print("Pod study/sharing and the student's personal reflection remain for the student.")
+    print("Review the notes and add the feedback from the pod discussion.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,221 @@
+Optional DuckDB dashboard comparison
+Measured UTC: 2026-11-11T17:48:20.285709+00:00
+Python: 3.14.8 DuckDB: 1.5.6
+Source SQLite library: 3.53.1
+Platform: Darwin arm64
+Date columns stay VARCHAR; ISO date comparisons match the SQLite fixture.
+Grouping includes site explicitly for portable SQL.
+Both engines are checked against the same source rows and report values.
+DuckDB worker threads: 1
+Copied machine: 50 rows
+Copied part: 10 rows
+Copied job: 20000 rows
+Copied job_part: 200000 rows
+Copied report_jobpart: 200000 rows
+
+NORMALIZED SQL:
+SELECT m.machine_id, m.site, j.technician, SUM(p.part_price) AS cost
+FROM job AS j
+JOIN machine AS m ON m.machine_id = j.machine_id
+JOIN job_part AS jp ON jp.job_id = j.job_id
+JOIN part AS p ON p.part_no = jp.part_no
+WHERE j.done_on >= '2026-03-01'
+GROUP BY m.machine_id, m.site, j.technician;
+EXPLAIN:
+┌───────────────────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_decompress_strin│
+│           g(#0)           │
+│__internal_decompress_strin│
+│           g(#1)           │
+│__internal_decompress_strin│
+│           g(#2)           │
+│             #3            │
+│                           │
+│        ~42,400 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│             #2            │
+│                           │
+│    Aggregates: sum(#3)    │
+│                           │
+│        ~42,400 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         machine_id        │
+│            site           │
+│         technician        │
+│         part_price        │
+│                           │
+│        ~42,553 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_compress_string_│
+│        ubigint(#0)        │
+│__internal_compress_string_│
+│        ubigint(#1)        │
+│__internal_compress_string_│
+│        uhugeint(#2)       │
+│             #3            │
+│                           │
+│        ~42,553 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        ├────────────────────────────────────────────────────────────────────────┐
+│     part_no = part_no     │                                                                        │
+│                           │                                                                        │
+│        ~42,553 rows       │                                                                        │
+└─────────────┬─────────────┘                                                                        │
+┌─────────────┴─────────────┐                                                          ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                                                          │          SEQ_SCAN         │
+│    ────────────────────   │                                                          │    ────────────────────   │
+│      Join Type: INNER     │                                                          │           Table:          │
+│                           │                                                          │    comparison.main.part   │
+│        Conditions:        │                                                          │                           │
+│      job_id = job_id      │                                                          │   Type: Sequential Scan   │
+│                           ├──────────────┐                                           │                           │
+│                           │              │                                           │        Projections:       │
+│                           │              │                                           │          part_no          │
+│                           │              │                                           │         part_price        │
+│                           │              │                                           │                           │
+│        ~42,553 rows       │              │                                           │          ~10 rows         │
+└─────────────┬─────────────┘              │                                           └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│          SEQ_SCAN         ││         HASH_JOIN         │
+│    ────────────────────   ││    ────────────────────   │
+│           Table:          ││      Join Type: INNER     │
+│  comparison.main.job_part ││                           │
+│                           ││        Conditions:        │
+│   Type: Sequential Scan   ││  machine_id = machine_id  │
+│                           ││                           ├──────────────┐
+│        Projections:       ││                           │              │
+│           job_id          ││                           │              │
+│          part_no          ││                           │              │
+│                           ││                           │              │
+│       ~200,000 rows       ││        ~4,255 rows        │              │
+└───────────────────────────┘└─────────────┬─────────────┘              │
+                             ┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+                             │          SEQ_SCAN         ││          SEQ_SCAN         │
+                             │    ────────────────────   ││    ────────────────────   │
+                             │           Table:          ││           Table:          │
+                             │    comparison.main.job    ││  comparison.main.machine  │
+                             │                           ││                           │
+                             │   Type: Sequential Scan   ││   Type: Sequential Scan   │
+                             │                           ││                           │
+                             │        Projections:       ││        Projections:       │
+                             │         machine_id        ││         machine_id        │
+                             │           job_id          ││            site           │
+                             │         technician        ││                           │
+                             │                           ││                           │
+                             │          Filters:         ││                           │
+                             │   done_on>='2026-03-01'   ││                           │
+                             │                           ││                           │
+                             │        ~4,000 rows        ││          ~50 rows         │
+                             └───────────────────────────┘└───────────────────────────┘
+
+
+REPORT SQL:
+SELECT machine_id, site, technician, SUM(part_price) AS cost
+FROM report_jobpart
+WHERE done_on >= '2026-03-01'
+GROUP BY machine_id, site, technician;
+EXPLAIN:
+┌───────────────────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_decompress_strin│
+│           g(#0)           │
+│__internal_decompress_strin│
+│           g(#1)           │
+│__internal_decompress_strin│
+│           g(#2)           │
+│             #3            │
+│                           │
+│         ~593 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│             #2            │
+│                           │
+│    Aggregates: sum(#3)    │
+│                           │
+│         ~593 rows         │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         machine_id        │
+│            site           │
+│         technician        │
+│         part_price        │
+│                           │
+│        ~40,000 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│__internal_compress_string_│
+│        ubigint(#0)        │
+│__internal_compress_string_│
+│        uhugeint(#1)       │
+│__internal_compress_string_│
+│        ubigint(#2)        │
+│             #3            │
+│                           │
+│        ~40,000 rows       │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          SEQ_SCAN         │
+│    ────────────────────   │
+│           Table:          │
+│      comparison.main      │
+│      .report_jobpart      │
+│                           │
+│   Type: Sequential Scan   │
+│                           │
+│        Projections:       │
+│         machine_id        │
+│            site           │
+│         technician        │
+│         part_price        │
+│                           │
+│          Filters:         │
+│   done_on>='2026-03-01'   │
+│                           │
+│        ~40,000 rows       │
+└───────────────────────────┘
+
+
+TIMING METHOD
+One untimed warm-up for each query; five alternating measured pairs.
+Wall-clock perf_counter includes query execution and fetching every result row.
+Import/COPY, schema setup, connection creation and checks are excluded.
+DuckDB tables have primary keys; no extra dashboard indexes were added.
+Result rows: 350
+Total report cost: 722610.0
+normalized runs_ms: 2.720, 2.720, 2.642, 2.671, 2.841
+normalized median_ms: 2.720
+report runs_ms: 1.574, 1.580, 1.606, 1.577, 1.589
+report median_ms: 1.580
+normalized/report median ratio: 1.721x
+All measured results matched the source SQLite output.
+This dataset can show a local read trade-off; it cannot establish that
+DuckDB removes every production need for denormalization or faster refreshes.
