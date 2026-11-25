@@ -1,0 +1,5 @@
+history.db: 112685056 bytes (112.685 MB)
+report_history.parquet: 2464491 bytes (2.464 MB)
+report_zstd.parquet: 1442397 bytes (1.442 MB)
+SQLite: (2000000, 21000000.0)
+Parquet: (2000000, 21000000.0)

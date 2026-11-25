@@ -1,0 +1,11 @@
+Run 1: uv run python Module06a/refresh.py --check
+SQLite rows=2000000 sum=21000000.00
+Parquet rows=2000000 sum=21000000.00
+check: PASS
+rows=2000000 checksum_sum=21000000.00 parquet_bytes=2464491 elapsed_ms=1965.8
+
+Run 2: uv run python Module06a/refresh.py --check
+SQLite rows=2000000 sum=21000000.00
+Parquet rows=2000000 sum=21000000.00
+check: PASS
+rows=2000000 checksum_sum=21000000.00 parquet_bytes=2464491 elapsed_ms=1949.2

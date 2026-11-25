@@ -6,4 +6,4 @@ The hardest part for me was naming the functional dependencies and deciding whic
 
 The results make the cost of repeated data easier to see. Changing a machine's site touched one row in the normalized design and 4,000 rows in the report. The checks also showed that all 200,000 rows could be reconstructed and that both dashboard queries returned the same answers.
 
-I got help from Codex with the SQL and Python scripts, running the benchmarks and explaining the results. I still need to add my first FD list and the neighbour-gate feedback. One question I want to ask my pod or instructor is how to decide whether an FD is a real business rule when there is only a small sample to work with.
+Codex helped me with the SQL and benchmarks. The bigger dataset gave me a way to check the FD about technicians because it had several technicians working on the same machine. One question I would bring to the pod is whether we should use the current price of a part or the price paid for that job.

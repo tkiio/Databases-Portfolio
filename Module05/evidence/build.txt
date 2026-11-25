@@ -1,5 +1,4 @@
 Round 3: setup and decomposition
-Measured UTC: 2026-11-11T17:48:18.034075+00:00
 Python 3.14.8; Python SQLite 3.53.1
 Executed setup.sql, normalize.sql and report.sql. Foreign keys ON.
 SELECT COUNT(*) FROM flat_jobpart;

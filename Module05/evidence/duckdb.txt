@@ -1,5 +1,4 @@
 Optional DuckDB dashboard comparison
-Measured UTC: 2026-11-11T17:48:20.285709+00:00
 Python: 3.14.8 DuckDB: 1.5.6
 Source SQLite library: 3.53.1
 Platform: Darwin arm64

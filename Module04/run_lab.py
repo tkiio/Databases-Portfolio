@@ -1,7 +1,7 @@
 """Run Module 4 and save actual evidence. Existing edge.db requires --reset.
 
 --reset rebuilds ONLY this module's edge.db. Do not use it for valuable data.
-All learning experiments are run by this script; pod discussion is human work.
+This script runs the local integrity experiments and saves their output.
 """
 import argparse
 import platform
@@ -279,7 +279,7 @@ def main():
     print("Completed the acceptance experiment and technical Tasks 1-5.")
     print("Actual output saved in Module04/evidence/.")
     print("edge.db: 5 readings; integrity_check=ok; no foreign-key violations.")
-    print("Review the notes and add the feedback from the pod discussion.")
+    print("See the integrity notes for examples to explain in the checkpoint.")
 
 
 if __name__ == "__main__":

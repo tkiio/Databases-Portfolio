@@ -105,10 +105,12 @@ The checks include rejected inserts, loading the CSV twice, generated values, al
 
 The point I want to remember is to check what the code actually guarantees. For example, an audit trigger does not automatically make its table immutable, and an INSERT alarm does not cover every UPSERT. These examples give me concrete questions to use when checking AI suggestions.
 
-## Agreed learning (pod discussion)
+## Pod discussion notes
 
 Understanding the content was a bit difficult. My pod mates and I helped each other understand it, and explaining things to one another helped with the material.
 
-I still need to add the specific points agreed with the neighbouring pod and any question we left open. One question to discuss is whether a corrected reading that crosses the vibration threshold should create a new alarm, and whether alarms should record every high sample or only threshold crossings.
+The example I would show is the CSV replay. The table went from 1 row to 4 and stayed at 4 after the second import. The unique key explains why it did not create duplicates. I would also show that a `CHECK` can accept NULL unless there is a separate `NOT NULL` rule.
+
+My question for the other pod is whether a corrected reading should create an alarm when it crosses the threshold. The lab trigger handled new inserts, so correcting an existing row is a case to think through.
 
 [Module 4](README.md) · [Reflection 4](../Reflections/ref04.md)

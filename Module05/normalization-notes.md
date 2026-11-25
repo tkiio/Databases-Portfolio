@@ -99,18 +99,16 @@ The FD question in the task asks which dependencies are domain rules and which a
 
 The saved tests compare full reconstructed rows, query results, plans, repeated timings, update counts and object storage. Those checks matter because a claim such as “one table must be faster” is not enough. The source scripts, versions and raw output make the work reproducible.
 
-## My round gates
+## Checkpoint walkthrough
 
-| Round | Technical artefact | Neighbour gate |
-| --- | --- | --- |
-| 1 | FD list and diagrams saved; comparison with my own first list still to add | Not yet recorded |
-| 2 | SQL and broken rows saved | Not yet recorded |
-| 3 | Counts and complete reconstruction checked | Not yet recorded |
-| 4 | Results, timings and plans saved | Not yet recorded |
-| 5 | Rows changed, storage and index comparison saved | Not yet recorded |
-| 6 | Recommendation written | Read-aloud and what-if question still to record |
-| 7 | Curiosities collected | Swap and course-format feedback still to record |
-
-Questions to take to my pod: what assumption makes `(job_id, part_no)` a key, and should our report use current part prices or historical charged prices? I still need to add the actual feedback from the gates and harvest exchange.
+| Round | What I would explain |
+| --- | --- |
+| 1 | One technician per machine fits the small sample. A later job by a different technician breaks that pattern. |
+| 2 | Updating one copy of the site leaves conflicting values for the same machine. |
+| 3 | The normalized tables reproduce all 200,000 original rows when joined. |
+| 4 | The two queries returned the same results. The read times depend on the plan and the indexes. |
+| 5 | One site change touched 1 source row and 4,000 report rows. |
+| 6 | I would keep the source normalized and give the report copy a refresh schedule and a timestamp. |
+| 7 | My question is whether a past job should show the current catalogue price or the amount we actually paid. I would put the amount paid on the job-part row. |
 
 [Module 5](README.md) · [Sources and curiosities](curiosities.md) · [Reflection 5](../Reflections/ref05.md)

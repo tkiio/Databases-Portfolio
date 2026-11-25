@@ -1,0 +1,3 @@
+# Project ticket — Machine maintenance and parts costs
+
+The person is a workshop maintenance supervisor who needs to decide which machine should be inspected first. My first question is: which machines had the most maintenance jobs and the highest parts cost in the last 90 days? I want to build a small maintenance dashboard using machines, jobs, parts and the parts used on each job. I will start with the reproducible data from Module 5 and clearly label it as generated data. For the sample, the 90-day window will be relative to its latest job date so the demo is repeatable. The first version will estimate parts costs at current catalogue prices; recording the actual price paid on each job would be the next step if historical spending is required.

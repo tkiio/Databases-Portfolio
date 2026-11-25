@@ -96,4 +96,4 @@ A `Vehicle` supertype with `Car` and `Truck` subtypes is useful when the types s
 
 ## Share candidate
 
-Candidate: the recursive `EMPLOYEE supervises EMPLOYEE` redraw. One-line note: “We chose this because it shows that one entity type can take two distinct roles in the same relationship.” Ask the pod to agree on the image and post it in Discord; that post still needs to be made by a pod member.
+My pick for the pod to discuss is the recursive `EMPLOYEE supervises EMPLOYEE` redraw. One employee type can appear in two roles, supervisor and person being supervised.

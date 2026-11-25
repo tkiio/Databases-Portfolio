@@ -27,7 +27,7 @@ By the end of this module, you can:
 | Optional — DuckDB | [Comparison table](duckdb-results.md), [method](duckdb-notes.md), [script](duckdb_compare.py), [plans and output](evidence/duckdb.txt) |
 | Reflection | [Reflection 5](../Reflections/ref05.md) |
 
-The dataset is generated for this lab. My round-gate progress and the points still to discuss are in the notes.
+The dataset is generated for this lab. The [round walkthrough](normalization-notes.md#checkpoint-walkthrough) links the evidence to questions I can discuss.
 
 ## What I found difficult
 

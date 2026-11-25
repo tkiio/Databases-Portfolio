@@ -1,0 +1,19 @@
+{
+  "sqlite": "3.53.1",
+  "rows": 1000,
+  "fanuc_rows": 334,
+  "queries": {
+    "indexed": "SELECT name FROM device WHERE json_extract(meta,'$.vendor')='Fanuc'",
+    "shorthand": "SELECT name FROM device WHERE meta ->> 'vendor'='Fanuc'"
+  },
+  "plans": {
+    "indexed": [
+      "SEARCH device USING INDEX ix_device_vendor (<expr>=?)"
+    ],
+    "shorthand": [
+      "SCAN device"
+    ]
+  },
+  "invalid_json_error": "CHECK constraint failed: json_valid(meta)",
+  "columns_unchanged": true
+}

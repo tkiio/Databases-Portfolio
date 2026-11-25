@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-19",
+  "method": "Transcribed from visible pgweb query results during the live classroom-server test.",
+  "database": "pod03",
+  "table": "module06b_server_demo",
+  "connection_a_pid": 33694,
+  "connection_b_pid": 33673,
+  "a_before_commit": {
+    "id": 1,
+    "status": "running",
+    "updated_by": "connection-A"
+  },
+  "activity_rows": [
+    {
+      "pid": 33673,
+      "state": "active",
+      "wait_event_type": "Lock",
+      "wait_event": "transactionid",
+      "blocked_by": [
+        33694
+      ]
+    },
+    {
+      "pid": 33694,
+      "state": "active",
+      "wait_event_type": null,
+      "wait_event": null,
+      "blocked_by": []
+    }
+  ],
+  "b_reported_query_ms": 36808,
+  "b_after_a_commit": {
+    "backend_pid": 33673,
+    "id": 1,
+    "status": "inspection",
+    "updated_by": "connection-B"
+  },
+  "outage_error": "ERROR: dial tcp [::1]:5432: connect: connection refused",
+  "outage_cause": "Not independently verified; the database process was not controlled by this test.",
+  "recovery_observed": true,
+  "row_after_reconnection": {
+    "id": 1,
+    "status": "ready",
+    "updated_by": "reset"
+  },
+  "screenshots_saved": true,
+  "screenshot_files": [
+    "postgres-final-table.png"
+  ],
+  "screenshot_scope": "User-supplied final table state only; no screenshot of the lock wait."
+}

@@ -1,0 +1,11 @@
+20,000 sets and 20,000 gets per engine; fresh stores; three measured runs.
+One warm-up per engine; measured order alternates; payloads built outside timing.
+shelve set includes sync(); SQLite set includes one transaction commit.
+These flush calls do not establish equal crash-durability guarantees.
+shelve  set=0.6422s get=0.0377s
+  set runs: [0.7220754589943681, 0.642210541991517, 0.6221463330148254] get runs: [0.03891525001381524, 0.03774925001198426, 0.03766695800004527]
+sqlite  set=0.0101s get=0.0655s
+  set runs: [0.010082416993100196, 0.010165333020268008, 0.009110165992751718] get runs: [0.06618204200640321, 0.06382895898423158, 0.06547058300930075]
+shelve backend: ['dbm.sqlite3']
+All stored values and read values matched; SQL city:1 count=5000.
+No timestamps are stored, so this fixture cannot answer a last-week query.

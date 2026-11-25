@@ -21,6 +21,7 @@
 | Crow's-foot notation | A circle means zero, a bar means one, and the three-pronged symbol means many. | [ER model: Crow's-foot notation](https://en.wikipedia.org/wiki/Entity%E2%80%93relationship_model#Crow's_foot_notation) |
 | EER inheritance | Subtypes inherit common attributes and can add attributes of their own. | [Enhanced ER model](https://en.wikipedia.org/wiki/Enhanced_entity%E2%80%93relationship_model) |
 | Why SQLite foreign keys need enabling | They are off by default for backwards compatibility; use `PRAGMA foreign_keys = ON` for each connection. | [SQLite foreign-key support](https://sqlite.org/foreignkeys.html) |
+| First Normal Form (1NF) | A value like `P-1001,P-1002` packs two parts into one field. Separate job-part rows let SQL find and join each part. | [First normal form](https://en.wikipedia.org/wiki/First_normal_form) |
 
 ## Remarkable things
 
@@ -86,7 +87,7 @@ What I learned: one entity type can participate twice in one relationship. Role 
 
 ### 1. Machine and nameplate (1:1)
 
-The nameplate can be a separate entity if we need to store and manage its serial number and manufacturer explicitly. In that design, `machine_id` is a unique, required foreign key in `Nameplate`, so each machine and nameplate correspond to exactly one another. If the nameplate has no separate meaning in the system, its fields could instead be attributes of `Machine`.
+The nameplate can be a separate entity if we need to store and manage its serial number and manufacturer explicitly. A unique, required `machine_id` foreign key in `Nameplate` gives each plate exactly one machine and each machine at most one plate. To require a plate for every machine, I would store the required plate fields on `Machine` or enforce that rule separately.
 
 ```mermaid
 erDiagram
@@ -205,6 +206,8 @@ CNC-01  2
 
 The runnable proof is also saved as [`cardinality-proof.sql`](cardinality-proof.sql).
 
-## Agreed learning (pod discussion)
+## Pod discussion notes
 
-_Add the points your pod and neighboring pod actually agreed on, and record any open disagreement. Do this after the discussion._
+My pod helped me understand cardinality, entities and inheritance. I explained the 1NF example with two part numbers in one field. The join test made it easier to see the problem because it missed the job with two parts.
+
+I would show the sensor example first. The key is on the sensor side because each sensor belongs to one machine. I would ask the other pod how they would enforce the rule that each machine has exactly one subtype.

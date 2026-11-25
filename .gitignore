@@ -14,3 +14,10 @@ __pycache__/
 
 # macOS metadata
 .DS_Store
+
+Module06a/report_jobpart.csv
+
+Module06a/refresh-*/
+
+# Module 6b generated session stores
+Module06b/sessions*

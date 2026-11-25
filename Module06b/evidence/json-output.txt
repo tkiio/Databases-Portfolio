@@ -1,0 +1,35 @@
+SQLite: 3.53.1
+Device rows: 1000
+
+-- A path behaves like a column 
+ SELECT name,json_extract(meta,'$.vendor') FROM device LIMIT 5
+('cnc-01', 'Siemens')
+('cnc-02', 'Fanuc')
+('molder-07', 'Arburg')
+('device-0004', 'Fanuc')
+('device-0005', 'Arburg')
+
+-- The ->> shorthand 
+ SELECT name,meta ->> '$.firmware' FROM device LIMIT 5
+('cnc-01', '4.2')
+('cnc-02', '3.9')
+('molder-07', '8.1')
+('device-0004', '4.4')
+('device-0005', '0.5')
+
+-- An object becomes rows 
+ SELECT d.name,j.key,j.value FROM device d,json_each(d.meta) j WHERE d.name='cnc-01'
+('cnc-01', 'vendor', 'Siemens')
+('cnc-01', 'firmware', '4.2')
+('cnc-01', 'calibrated', '2026-01-10')
+
+ SELECT name FROM device WHERE json_extract(meta,'$.vendor')='Fanuc'
+SEARCH device USING INDEX ix_device_vendor (<expr>=?)
+
+ SELECT name FROM device WHERE meta ->> 'vendor'='Fanuc'
+SCAN device
+Matching Fanuc rows: 334
+Invalid JSON rejected: CHECK constraint failed: json_valid(meta)
+Valid scalar accepted: ('integer',)
+New vendor field, no column migration: ('cnc-01', 180)
+Columns before/after: ['device_id', 'name', 'meta'] ['device_id', 'name', 'meta']

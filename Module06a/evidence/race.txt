@@ -1,0 +1,4 @@
+dashboard  sqlite   696.5 ms [693.9-700.6]   duckdb    5.6 ms [5.4-5.7]    123.7x
+monthly    sqlite   811.9 ms [807.7-813.5]   duckdb    4.5 ms [4.3-4.8]    179.2x
+Both engines returned matching answers. Monthly COUNT(*) counts part rows.
+Versions: SQLite 3.53.1 DuckDB 1.5.6

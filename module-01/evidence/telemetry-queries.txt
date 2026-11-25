@@ -1,0 +1,32 @@
+Module 1 telemetry check using the local SQLite file.
+3.54.0 2026-04-09 12:25:13 8fa8248e303219400c646a885e36dfc52eae33d83f4412e3f369b2be5373aapl (64-bit)
+Database file size: 10M
+.headers on
+.mode column
+.timer on
+SELECT COUNT(*) AS total_rows FROM readings;
+total_rows
+----------
+    172800
+Run Time: real 0.005254 user 0.000876 sys 0.001968
+SELECT machine, COUNT(*) AS n FROM readings GROUP BY machine;
+machine    n
+-------  -----
+cnc-01   57600
+cnc-02   57600
+cnc-03   57600
+Run Time: real 0.020849 user 0.019451 sys 0.001396
+SELECT machine, MAX(vib_rms) AS peak_vib FROM readings GROUP BY machine;
+machine  peak_vib
+-------  --------
+cnc-01      2.398
+cnc-02      3.168
+cnc-03       2.55
+Run Time: real 0.021086 user 0.019862 sys 0.001219
+SELECT COUNT(*) AS readings_above_2_mm_s FROM readings WHERE vib_rms > 2.0;
+readings_above_2_mm_s
+---------------------
+                11714
+Run Time: real 0.004202 user 0.003042 sys 0.001161
+$ python module-01/query_telemetry.py 2.0
+11,714 readings above 2 mm/s

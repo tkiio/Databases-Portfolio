@@ -1,4 +1,4 @@
-Module 5: update, insert and delete anomalies
+Module 5: actual anomaly results
 Measured UTC: 2026-11-11T17:48:18.514798+00:00
 Python 3.14.8; SQLite 3.53.1
 Each main example restores the same initial five rows.

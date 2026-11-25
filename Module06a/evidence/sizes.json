@@ -1,0 +1,15 @@
+{
+  "bytes": {
+    "history.db": 112685056,
+    "report_history.parquet": 2464491,
+    "report_zstd.parquet": 1442397
+  },
+  "sqlite_totals": [
+    2000000,
+    21000000.0
+  ],
+  "parquet_totals": [
+    2000000,
+    21000000.0
+  ]
+}

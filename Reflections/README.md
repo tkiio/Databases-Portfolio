@@ -1,19 +1,13 @@
-Here are all the reflections, one for each class session.
-Make sure you plan some time (<10min) on the day of the session
-to remember interesting points of the session.
+# Reflections
 
-They will be named ref01.md to refnn.md
+My notes on what worked, what I struggled with, and how I checked my understanding in each class.
 
-As a reminder, we expect the following in a reflection:
+- [Module 1 — First database and Git portfolio](ref01.md)
+- [Module 2 — ER models and schema audit](ref02.md)
+- [Module 3 — Query plans and indexes](ref03.md)
+- [Module 4 — Constraints, UPSERT and triggers](ref04.md)
+- [Module 5 — Normalization and reporting](ref05.md)
+- [Module 6a — SQLite and DuckDB](ref06a.md)
+- [Module 6b — Choosing a database](ref06b.md)
 
-- What is your take-away, what do you want to remember, what would be your advice?
-  Take-away can be small summary, but better outstanding points.
-- What was good?
-- What was difficult, where did you struggle?
-- Was there any good/fun “struggling”/exploration?
-  Any show stoppers – anything where you should reach out to peers or instructors? 
-- How was your interaction with peers/instructors?
-- Help and extra work
-  - Who helped you, gave feedback, was it valuable?
-  - Who did you help, gave feedback to?
-  - Did you present, implement, made a PR, or fix something that was crucial for the class in itself?
+[Portfolio home](../README.md)

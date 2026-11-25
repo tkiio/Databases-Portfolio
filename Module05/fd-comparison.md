@@ -106,4 +106,4 @@ The two-connection experiment also shows a second writer receiving `database is 
 
 The INSERT example deliberately does **not** claim a constraint error. `flat5` has no key or NOT NULL rules, so the anomaly is the awkward representation, not rejection by SQLite. [SQLite CREATE TABLE documentation](https://www.sqlite.org/lang_createtable.html)
 
-My next step is to compare this with my first FD list and discuss the differences at the neighbour gate.
+One question I would bring to the pod is what change to the business rules would make `(job_id, part_no)` stop being a key. For example, the same part might need two separate line entries on one job.

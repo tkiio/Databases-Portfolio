@@ -1,0 +1,79 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+     EXPLAIN ANALYZE     SELECT machine_id, site, technician, SUM(part_price) AS cost     FROM read_parquet('/Users/tkiio/Desktop/Database/GitHub/Databases-Portfolio/Module06a/report_history.parquet')     WHERE done_on >= '2026-01-01'     GROUP BY machine_id, site, technician 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0067s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│             #2            │
+│                           │
+│    Aggregates: sum(#3)    │
+│                           │
+│                           │
+│                           │
+│          350 rows         │
+│           0.03s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         machine_id        │
+│            site           │
+│         technician        │
+│         part_price        │
+│                           │
+│                           │
+│                           │
+│       2,000,000 rows      │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         TABLE_SCAN        │
+│    ────────────────────   │
+│         Function:         │
+│        READ_PARQUET       │
+│                           │
+│        Projections:       │
+│         machine_id        │
+│            site           │
+│         technician        │
+│         part_price        │
+│                           │
+│    Total Files Read: 1    │
+│                           │
+│        Filename(s):       │
+│    /Users/tkiio/Desktop   │
+│ /Database/GitHub/Databases│
+│    -Portfolio/Module06a   │
+│  /report_history.parquet  │
+│                           │
+│                           │
+│                           │
+│       2,000,000 rows      │
+│           0.01s           │
+└───────────────────────────┘
+
+
+SQLite plan for the same query:
+SCAN report_history
+USE TEMP B-TREE FOR GROUP BY

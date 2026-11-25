@@ -1,0 +1,43 @@
+PostgreSQL shared-server test — 2026-11-19
+Recording method: transcribed from the visible pgweb results.
+Database: pod03. Test table: module06b_server_demo, row id=1.
+
+1. Initial state and visibility
+Connection A saw status=running, updated_by=connection-A inside its open transaction.
+Connection B still saw status=ready, updated_by=reset before A committed.
+The update existed in A; it was not yet visible as committed data to B.
+
+2. Service interruption and recovery
+The pgweb page remained available, but a database query returned:
+ERROR: dial tcp [::1]:5432: connect: connection refused
+A later query succeeded again. After reconnection the row was ready/reset.
+The cause of the interruption was not independently verified and no server stop/start command was run by this test.
+
+3. Repeated lock test after recovery
+Connection A backend PID: 33694.
+Connection B backend PID: 33673.
+A executed BEGIN, then UPDATE ... WHERE id=1 RETURNING ...;
+A returned: 33694 | 1 | running | connection-A.
+B executed its UPDATE and pgweb displayed: Please wait, query is executing...
+
+A inspected the activity of these two connections:
+SELECT pid, state, wait_event_type, wait_event, pg_blocking_pids(pid) AS blocked_by
+FROM pg_stat_activity
+WHERE datname=current_database() AND pid IN (33694,33673)
+ORDER BY pid;
+
+Observed result:
+pid    | state  | wait_event_type | wait_event    | blocked_by
+33673  | active | Lock            | transactionid | {33694}
+33694  | active | NULL            | NULL          | {}
+
+A executed COMMIT.
+B then completed and returned: 33673 | 1 | inspection | connection-B.
+B's query time displayed in pgweb: 36808 ms (including waiting, not ordinary update latency).
+This wait duration depended on when A was committed.
+
+Conclusion: PostgreSQL identified A as B's blocker; B completed after A released its transaction lock.
+The two Safari tabs had different backend PIDs, so they were independent database connections in this test.
+No row-lock video or local screenshot file was saved. The query results above are the evidence.
+
+Screenshot added from user attachment on 2026-11-25: postgres-final-table.png. Shows final table state (row 1: inspection / connection-B), not the lock wait. This supplements the earlier transcribed evidence.

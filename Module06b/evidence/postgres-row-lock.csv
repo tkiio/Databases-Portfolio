@@ -1,0 +1,3 @@
+pid,state,wait_event_type,wait_event,blocked_by
+33673,active,Lock,transactionid,{33694}
+33694,active,,,{}

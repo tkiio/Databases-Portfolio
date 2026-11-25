@@ -27,17 +27,19 @@ R = customer ⋈_(customer.customer_id = orders.customer_id) orders
     ⋈_(order_line.product_id = product.product_id) product
 ```
 
-Then filter to 2025, keep only columns needed for the report, and group/aggregate:
+Then filter to 2025, project the columns using SQL bag semantics, and calculate the aggregates:
 
 ```text
 γ_(city;
   COUNT(DISTINCT customer_id) → customers,
   SUM(qty × price) → revenue)
-  (π_(city, customer_id, qty, price)
+  (π_bag_(city, customer_id, qty, price)
     (σ_(ordered_on >= '2025-01-01' AND ordered_on < '2026-01-01')(R)))
 ```
 
-`σ` is the `WHERE` filter, `π` keeps the columns needed for the report, `⋈` matches related rows through their keys, and `γ` groups rows by city and calculates the aggregates. `ORDER BY revenue DESC` only sorts the final displayed rows; it does not change which rows or aggregate values the relational expression produces.
+`σ` is the `WHERE` filter, `π_bag` keeps the columns needed for the report and preserves duplicate rows, `⋈` matches related rows through their keys, and `γ` groups rows by city and calculates the aggregates. `ORDER BY revenue DESC` only sorts the final displayed rows; it does not change which rows or aggregate values the relational expression produces.
+
+Two different order lines can have identical values in these four columns. A classical set projection would collapse them before `SUM` and change the revenue. An equivalent set-based expression can aggregate the full joined rows without that projection.
 
 ## Check
 

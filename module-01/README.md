@@ -2,7 +2,7 @@
 
 This page collects my Module 1 notes and evidence for the HSBI Databases course.
 
-## Personnal profile
+## Personal profile
 I am Trevor Kiio. 20 year old student at HSBI taking Mechatronics and Automation. I am Kenyan and have interacted, though minimally with HTML, C and C++. I have also done a bit of app development but with great help from AI moreso Claude and ChatGPT. This has helped me understand a great deal of database and made sense of the stuff that await me in this class. I am really looking forward to go through with this class.
 
 ## Learning goals
@@ -26,6 +26,8 @@ Take a first LLM-generated query, run it, and begin the habit that defines this 
 - [SQLite shell tour](shell-tour.txt)
 - [SQL dump for rebuilding the shell-tour database](tour.sql)
 
+I find `.schema` useful because it tells me how the table was defined before I start writing a query.
+
 ## Telemetry exercise
 
 The scripts generate two days of machine readings and load them into a local SQLite database:
@@ -35,15 +37,17 @@ The scripts generate two days of machine readings and load them into a local SQL
 
 The generated dataset contains 172,800 readings. The local database measured 10 MB. The database and generated CSV are excluded from Git; the scripts can recreate them.
 
-The script files are [generate_telemetry.py](generate_telemetry.py) and [load_telemetry.py](load_telemetry.py). Screenshots of the generator, query results, and row count are in the [evidence gallery](evidence/README.md).
+The script files are [generate_telemetry.py](generate_telemetry.py) and [load_telemetry.py](load_telemetry.py). The [timed SQLite queries](evidence/telemetry-queries.txt) show the counts and maximum vibration. [query_telemetry.py](query_telemetry.py) reads the same file with a bound threshold. Screenshots are in the [evidence gallery](evidence/README.md).
+
+The 172,800 readings fit in a local 10 MB file. SQLite can query it from the app without running a separate service. A shared PostgreSQL server is useful when several people need the same central data, as in the [two-writer exercise](../Module06b/README.md#concurrency-result). A hosted database would add service costs that the team operating it would pay, even for this small dataset.
 
 ## Reflection
 
 - [Reflection 1](../Reflections/ref01.md)
 
-## To add as I continue the module
+## Study notes and links
 
-- Notes on the course inspirations and my personal profile
-- My definition of IoT, including domains, protocols, devices, and challenges
-- Results and timings for the three telemetry queries
-- [LLM query verification notes](llm-verification.md) — prompt, SQL, run results, query plan, and verification reflection
+- [SQL Island](sql-island.md) — tutorial answers from the game examples.
+- [LLM query verification](llm-verification.md) — prompt, result, plan and counterexample.
+- [Course syllabus](https://github.com/iotempire/iotempire-teaching/blob/main/full-classes/hsbi-databases-10d/syllabus.md) and [Module 1 handout](https://github.com/iotempire/iotempire-teaching/blob/main/full-classes/hsbi-databases-10d/modules/01-introduction-and-local-first.md).
+- Pod portfolios for [Ryan](https://github.com/reilly-codes/Database-class) and [Trevor Fidel](https://github.com/TrevorFidel/Database-HSBI).

@@ -1,0 +1,24 @@
+
+ course_single
+sqlite insert median_ms= 0.368 runs_ms= [0.37, 0.368, 0.363]
+sqlite lookup median_ms= 0.459 runs_ms= [0.463, 0.456, 0.459]
+duckdb insert median_ms= 241.275 runs_ms= [242.005, 241.275, 239.581]
+duckdb lookup median_ms= 100.884 runs_ms= [101.976, 100.884, 100.276]
+
+ single_transaction
+sqlite insert median_ms= 0.366 runs_ms= [0.368, 0.366, 0.351]
+sqlite lookup median_ms= 0.457 runs_ms= [0.458, 0.457, 0.449]
+duckdb insert median_ms= 198.408 runs_ms= [198.408, 196.531, 198.484]
+duckdb lookup median_ms= 100.495 runs_ms= [100.495, 99.667, 101.339]
+
+ executemany
+sqlite insert median_ms= 0.212 runs_ms= [0.212, 0.216, 0.208]
+sqlite lookup median_ms= 0.458 runs_ms= [0.458, 0.461, 0.447]
+duckdb insert median_ms= 173.946 runs_ms= [172.631, 173.946, 174.738]
+duckdb lookup median_ms= 101.871 runs_ms= [103.125, 101.871, 101.696]
+
+N=1000 per run; three measured runs plus a warm-up; fresh in-memory tables.
+course_single reproduces the course transaction difference; compare single_transaction for equal transaction scope.
+executemany also uses one transaction per engine. It is not a columnar bulk COPY.
+These are in-memory API timings, not disk durability measurements.
+Versions: 3.53.1 1.5.6

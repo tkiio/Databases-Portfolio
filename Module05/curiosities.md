@@ -1,6 +1,6 @@
 # My Module 5 harvest
 
-These are the points I want to bring to the pod's list swap. The exchange and any unanswered question for `#sql-questions` are still to record.
+These are the points I want to bring to the pod's list swap.
 
 | What caught my attention | What to check or discuss | Source |
 | --- | --- | --- |

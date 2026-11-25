@@ -1,5 +1,4 @@
-Module 5: query, update and storage measurements
-Measured UTC: 2026-11-11T17:48:18.693295+00:00
+Module 5
 Python 3.14.8; Python SQLite 3.53.1
 CLI SQLite: 3.54.0 2026-04-09 12:25:13 8fa8248e303219400c646a885e36dfc52eae33d83f4412e3f369b2be5373aapl (64-bit)
 Platform: Darwin arm64
