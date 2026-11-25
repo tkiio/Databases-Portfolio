@@ -99,4 +99,4 @@ These plans show why the grouped reference is the simplest fit for this aggregat
 
 ## LLM note
 
-The two rewrites in this comparison were prepared with ChatGPT, GPT-6 Luna at medium thinking (the model setting identified for this chat). I checked them by running all three queries and comparing their full result sets; they matched. The grouped query was the reference/default form, while the correlated and window forms were the rewrites.
+I used AI to help write the correlated and window versions. I ran both and compared their full results with the original grouped query. All three returned the same rows and counts.

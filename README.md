@@ -1,10 +1,11 @@
 # Trevor Kiio — HSBI Databases Portfolio
 
-This repository collects my notes, exercises, reflections, and evidence from the HSBI Databases course. 
+These are my notes and lab results from the HSBI Databases course.
+
 ## Table of Contents
 
-- [Module 1 ](module-01/README.md)
-- [Module 2 ](module-02/README.md) 
+- [Module 1](module-01/README.md)
+- [Module 2](module-02/README.md)
 - [Module 3](Module03/README.md)
 - [Module 4](Module04/README.md)
 - [Module 5](Module05/README.md)
@@ -42,6 +43,4 @@ This repository collects my notes, exercises, reflections, and evidence from the
 
 - Ryan Reilly Oduory — [portfolio](https://github.com/reilly-codes/Database-class)
 - Trevor Fidel Nyongesa — [portfolio](https://github.com/TrevorFidel/Database-HSBI)
-
-Author : Trevor Kiio
 

@@ -63,7 +63,7 @@ Why it is confusing: the diagram has no relationship line, even though the data 
 
 ## Schema to diagram, then verify
 
-**Prompt used with ChatGPT:** “Given these SQLite table definitions, produce Mermaid `erDiagram` syntax. Distinguish declared foreign-key relationships from likely relationships suggested only by matching column names. Do not claim an unenforced relationship is guaranteed.”
+**AI prompt:** “Given these SQLite table definitions, produce Mermaid `erDiagram` syntax. Distinguish declared foreign-key relationships from likely relationships suggested only by matching column names. Do not claim an unenforced relationship is guaranteed.”
 
 The legacy schema has `machine.machine_name` and `maint_job.machine_name`, but declares no foreign key. It has `maint_job.parts_used` and `part.part_no`, but the former is a comma-separated string. A likely-intent redraw is:
 
@@ -80,7 +80,7 @@ I checked the database using `PRAGMA foreign_key_list(maint_job);` and `PRAGMA f
 
 ## Diagram to schema, then back to `.schema`
 
-**Prompt used with ChatGPT:** “Convert the corrected Mermaid model of Machine, Technician, MaintenanceJob, Part, and JobPart into SQLite-compatible `CREATE TABLE` statements. Use primary keys, foreign keys, a unique machine serial number, and a composite key on JobPart.”
+**AI prompt:** “Convert the corrected Mermaid model of Machine, Technician, MaintenanceJob, Part, and JobPart into SQLite-compatible `CREATE TABLE` statements. Use primary keys, foreign keys, a unique machine serial number, and a composite key on JobPart.”
 
 The resulting SQLAlchemy contract is in [`contract.py`](contract.py), and its emitted DDL is in [`contract-ddl.sql`](contract-ddl.sql). I ran that DDL in an in-memory SQLite database; [`roundtrip-schema.txt`](roundtrip-schema.txt) contains the schema SQLite reported. The core links survived: `maint_job` references `machine` and `technician`, and `job_part` references `maint_job` and `part`. The unique serial number and composite junction key also appear in the DDL.
 

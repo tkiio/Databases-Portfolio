@@ -3,7 +3,7 @@
 This page collects my Module 1 notes and evidence for the HSBI Databases course.
 
 ## Personal profile
-I am Trevor Kiio. 20 year old student at HSBI taking Mechatronics and Automation. I am Kenyan and have interacted, though minimally with HTML, C and C++. I have also done a bit of app development but with great help from AI moreso Claude and ChatGPT. This has helped me understand a great deal of database and made sense of the stuff that await me in this class. I am really looking forward to go through with this class.
+I'm Trevor Kiio, a Mechatronics and Automation student at HSBI. I'm from Kenya and have some experience with HTML, C and C++. I've also tried a bit of app development with AI help. In this class I want to get more comfortable with SQL and see how an app stores its data.
 
 ## Learning goals
 By the end of this module, you can:

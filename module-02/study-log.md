@@ -32,7 +32,7 @@
 
 ## LLM Q&A
 
-**Prompt used with ChatGPT:** “Given the SQLite tables `maint_job(job_id, parts_used)` and `part(part_no, description)`, is `JOIN part p ON p.part_no = j.parts_used` correct for listing every job-part relationship? Explain what it will miss.”
+**AI prompt:** “Given the SQLite tables `maint_job(job_id, parts_used)` and `part(part_no, description)`, is `JOIN part p ON p.part_no = j.parts_used` correct for listing every job-part relationship? Explain what it will miss.”
 
 **Answer summary:** No. Equality compares the entire `parts_used` text with one `part_no`; a value such as `P-1001,P-1002` cannot match either individual part. A normalized `job_part(job_id, part_no)` junction table is the reliable design.
 
